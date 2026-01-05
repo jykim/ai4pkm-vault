@@ -1,0 +1,19 @@
+# Content directories (user-specific data)
+Ingest/*
+Journal/*
+Topics/*
+AI/*
+_Settings_/Tasks/*
+
+# Keep directory structure
+!Ingest/.gitkeep
+!Journal/.gitkeep
+!Topics/.gitkeep
+!AI/.gitkeep
+!_Settings_/Tasks/.gitkeep
+
+# Secrets
+secrets.yaml
+
+# macOS
+.DS_Store

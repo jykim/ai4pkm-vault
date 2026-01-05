@@ -1,0 +1,44 @@
+{
+  "collapse-filter": false,
+  "search": "-path:_Settings_",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Topics",
+      "color": {
+        "a": 1,
+        "rgb": 14701138
+      }
+    },
+    {
+      "query": "path:AI/Summary  ",
+      "color": {
+        "a": 1,
+        "rgb": 14725458
+      }
+    },
+    {
+      "query": "path:Ingest  ",
+      "color": {
+        "a": 1,
+        "rgb": 5562450
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": false,
+  "centerStrength": 1,
+  "repelStrength": 17.890625,
+  "linkStrength": 1,
+  "linkDistance": 135,
+  "scale": 2.4252468233970985,
+  "close": false
+}

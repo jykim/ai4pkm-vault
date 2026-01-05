@@ -1,0 +1,28 @@
+formulas:
+  starred: ""
+properties:
+  note.starred:
+    displayName: done
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - file.inFolder("AI/Summary")
+    order:
+      - file.name
+      - created
+      - star_count
+      - tags
+      - action items
+      - starred
+      - author
+      - source
+    sort:
+      - property: created
+        direction: DESC
+    columnSize:
+      file.name: 416
+      note.created: 119
+      note.star_count: 107
+      note.tags: 115

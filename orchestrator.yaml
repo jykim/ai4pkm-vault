@@ -1,0 +1,36 @@
+version: "1.0"
+orchestrator:
+  prompts_dir: _Settings_/Prompts
+  tasks_dir: _Settings_/Tasks
+  logs_dir: _Settings_/Logs
+  skills_dir: .claude/skills
+  bases_dir: _Settings_/Bases
+  max_concurrent: 3
+  poll_interval: 1
+  stt_provider: elevenlabs
+  stt_language: auto
+  tts_provider: elevenlabs
+  orchestrator_language: auto
+  system_prompt_file: _Settings_/Prompts/Real-time Voice Assistant (RVA).md
+  wakeword_enabled: true
+  wakeword_mode: conversational
+  manual_end_detection: true
+  periodic_processing: false
+  periodic_prompt: ""
+  periodic_seconds: 60
+  mic_gain: 1
+defaults:
+  executor: claude_code
+  timeout_minutes: 30
+  max_parallel: 3
+  task_create: true
+  task_priority: medium
+  task_archived: false
+nodes:
+  - type: agent
+    name: Enrich Ingested Content (EIC)
+    input_path: Ingest/Clippings
+    output_path: AI/Summary
+    output_type: new_file
+id: ai4pkm_vault
+name: ai4pkm_vault

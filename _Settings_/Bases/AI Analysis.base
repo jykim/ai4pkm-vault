@@ -1,0 +1,25 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - file.inFolder("AI/Analysis")
+    order:
+      - file.name
+      - source
+      - action items
+      - done
+      - created
+    sort:
+      - property: created
+        direction: DESC
+      - property: file.name
+        direction: DESC
+      - property: related
+        direction: ASC
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 468
+      note.source: 138
+      note.action items: 174
