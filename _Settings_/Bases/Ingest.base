@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      or:
+        - file.path.contains("/Ingest/")
+    order:
+      - participant
+      - file.ctime
+      - title
+      - source
+    sort:
+      - property: file.ctime
+        direction: DESC

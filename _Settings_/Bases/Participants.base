@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - file.path.startsWith("Personal/")
+        - not file.path.contains("/Ingest/")
+        - not file.path.contains("/Publish/")
+        - not file.path.contains("/Skills/")
+        - not file.path.contains("/Prompts/")
+    order:
+      - name
+      - cohort
+      - interests

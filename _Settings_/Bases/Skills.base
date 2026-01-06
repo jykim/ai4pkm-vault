@@ -4,9 +4,8 @@ views:
     filters:
       and:
         - file.path.startsWith("Personal/")
-        - file.path.contains("/Prompts/")
+        - file.path.contains("/Skills/")
     order:
       - participant
-      - file.name
-      - category
-      - abbreviation
+      - name
+      - description

@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      or:
+        - file.path.contains("/Publish/")
+    order:
+      - participant
+      - file.ctime
+      - title
+      - status
+    sort:
+      - property: file.ctime
+        direction: DESC
