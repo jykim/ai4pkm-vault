@@ -46,7 +46,7 @@ NEVER proactively create documentation or README files.
 ## Search over files
 - For searching over topic or dates, start from `Topics` or `Roundup` folder
 - Follow markdown link to find related files (use `find` to find exact location)
-* **파일 검색 시 `.gitignore` 고려**: 파일 목록을 찾거나 내용을 검색할 때, `.gitignore`에 의해 제외될 수 있는 경우 `respect_git_ignore=False` 옵션을 사용하여 모든 관련 파일을 포함한다.
+* **Consider `.gitignore` when searching files**: When finding file lists or searching content, use `respect_git_ignore=False` option to include all relevant files that might otherwise be excluded by `.gitignore`.
 
 ## 📝 Content Creation Requirements
 ### General Guidelines
@@ -62,7 +62,28 @@ tags:
   - daily
 ```
 
+### Writing Style
+- **Tight layout**: Do not use horizontal dividers (`---`) between sections
+- **Paragraph cohesion**: Write related sentences as a single paragraph (minimum 2-3 sentences)
+  - Avoid paragraphs with only one sentence standing alone
+  - Combine short sentences logically into one
+
+### Markdown Table Formatting
+- **Blank line required before tables**: Markdown tables must have a blank line immediately before them to render properly
+
+### Diagram Standards
+> **Detailed guide**: See `.claude/skills/obsidian-mermaid/SKILL.md`
+
+- **Write diagrams in Mermaid**: Use Mermaid instead of ASCII art
+
+### Table vs Diagram Selection
+- **Use tables for**: Attribute-value mappings, comparisons, option listings (structured data)
+- **Use Mermaid for**: Flows, processes, relationships, time sequences (visual flows)
+- **Optimize document length**: Choose the format that expresses the same information more compactly
+
 ### Link Format Standards
+> **Detailed guide**: See `.claude/skills/obsidian-links/SKILL.md`
+
 - Use Link Format below for page properties:
 ```yaml
   - "[[Page Title]]"
@@ -75,9 +96,19 @@ tags:
 - Naming: `YYYY-MM-DD [Project Name] by [Agent Name].md`
 - Include source attribution for every insight
 
+### Inline Links for Research Documents
+- **Insert related links throughout the body of research/analysis documents**
+- Add contextual links where relevant content is mentioned, not just in the References section
+- **Link format**:
+  - `→ **Deep analysis**: [[path/to/file|display text]]`
+  - `→ **Related research**: [[path/to/file#section-name|display text]]`
+
 ### Properties & Frontmatter Standards
+> **Detailed guide**: See `.claude/skills/obsidian-yaml-frontmatter/SKILL.md`
+
 - Use a single YAML block at top (`---` … `---`). Leave one blank line after it.
-- Keys are lowercase and consistent: `title`, `source` (URL), `author` (list), `created` (YYYY-MM-DD), `tags` (list)
+- Keys are lowercase and consistent: `title`, `source` (URL), `author` (list), `created` (YYYY-MM-DD HH:MM:SS), `tags` (list)
+- **created property includes actual creation time**: When AI generates a document, record both date and time
 - Avoid duplicates like `date` vs `created`
 - Tags are plain text (no `#`) and indented list; authors may be wiki links wrapped in quotes
 - Quote values that contain colons, hashes, or look numeric to avoid YAML casting
@@ -86,8 +117,8 @@ tags:
 ## 🔄 Additional Principles
 
 ### Update over duplicated creation
-- 해당 날짜에 기존 파일이 존재하면 업데이트 (새로 만들지 말 것)
-  - 이때 그냥 추가된 내용을 덧붙이지 말고 전체적인 일관성을 고려해여 수정할 것 (중복은 죄악)
+- If a file already exists for that date, update it (do not create a new one)
+  - When updating, don't just append new content; revise with overall consistency in mind (duplication is a sin)
 
 ### Language Preferences
 - Use Korean as default language (English is fine, say, to quote original note)
@@ -95,7 +126,10 @@ tags:
 ### 🔗 Critical: Wiki Links Must Be Valid
 - **All wiki links must point to existing files**
 - Use complete filename: `[[2025-04-09 세컨드 브레인]]` not `[[세컨드 브레인]]`
-  - If possible add section links too (using `#` suffix)
+  - Add section links when possible (using `#` suffix)
+- **Section-level links required when citing sources**
+  - When quoting or referencing content from other documents, always link to the specific section
+  - Example: `[[2025-12-01 Meeting Notes#2. Discussion Items|Meeting Notes]]`
 - Verify file existence before linking
   - Fix broken links immediately
 - **Link to original sources, not topic indices**
@@ -112,6 +146,8 @@ tags:
 - **If unsure about section**: Link to file only `[[Limitless/YYYY-MM-DD]]`
 
 ### Heading Structure Guidelines
+> **Detailed guide**: See `.claude/skills/obsidian-markdown-structure/SKILL.md`
+
 - Clippings (EIC/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
 - ICT means improve the transcript (correct grammar, translate to Korean, structure with h3), not summarize. Keep length comparable to source; summaries live only under `## Summary`
 - Lifelog: use H1 `# YYYY-MM-DD Lifelog - <Assistant>` then H2 sections (Monologues, Conversations, etc.)
@@ -122,6 +158,9 @@ tags:
 - Focus on meaningful content over metadata files
 - Don't ask permission for any non-file-changing operations (search/list/echo etc)
 - Always use local time (usually in Seattle area) for processing requests
+
+## Multi-Vault Operations
+- **Registry**: Vault information is defined in `VAULTS.md` - read before cross-vault operations
 
 ---
 *For agent-specific rules, refer to individual agent configuration files: CLAUDE.md, GEMINI.md, AGENTS.md*
