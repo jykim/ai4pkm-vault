@@ -206,8 +206,7 @@
   "command-palette:open": [
     {
       "modifiers": [
-        "Mod",
-        "Shift"
+        "Mod"
       ],
       "key": "P"
     }
@@ -218,12 +217,6 @@
         "Mod"
       ],
       "key": "O"
-    },
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "P"
     }
   ],
   "editor:swap-line-down": [
