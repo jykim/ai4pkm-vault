@@ -57,16 +57,6 @@ Refer to that file for:
 - Mark `completed` immediately after finishing
 
 ## Version Control
-### Automatic Commit Policy
-- Commit changes after completing regular workflow runs 
-	- Don’t commit any other changes automatically
-- This includes changes from:
-	- DIR (Daily Ingestion and Roundup)
-	- CKU (Continuous Knowledge Upkeep)
-	- WRP (Weekly Roundup and Planning)
-	- Any batch file modifications from prompts in `_Settings_/Prompts/`
-	- Processing that creates/modifies multiple files
-
 ### Commit Message Format for Workflows
 - Use format: `Workflow: [Name] - YYYY-MM-DD`
 - Only include affected files (don’t commit unaffected files)
