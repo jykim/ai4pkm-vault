@@ -15,5 +15,11 @@ _Settings_/Tasks/*
 # Secrets
 secrets.yaml
 
+# Logs
+*.log
+
 # macOS
 .DS_Store
+.obsidian/app.json
+.obsidian/daily-notes.json
+.obsidian/workspace.json

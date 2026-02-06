@@ -1,0 +1,7 @@
+sessionId: 5ac15cbf-cbf0-4cc9-abec-07c16bcdb040
+voiceSettings:
+  primaryLanguage: ko
+  secondaryLanguage: en
+  micGain: 0.1
+  systemPromptFile: _Settings_/Prompts/Real-time Voice Assistant (RVA).md
+  llmProvider: gobi

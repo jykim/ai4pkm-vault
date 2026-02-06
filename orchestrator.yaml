@@ -32,5 +32,24 @@ nodes:
     input_path: Ingest/Clippings
     output_path: AI/Summary
     output_type: new_file
+  - type: agent
+    name: Extract Document to Markdown (EDM)
+    input_path: Ingest/Documents
+    output_path: Ingest/Documents
+    executor: claude_code
+    input_type: new_file
+    input_pattern: "*.pdf|*.docx|*.doc|*.txt|*.epub"
+    trigger_exclude_pattern: "*.md"
+    output_naming: "{title}.md"
+    enabled: true
+  - type: agent
+    name: Generate Daily Roundup (GDR)
+    cron: "0 4 * * *"
+    output_path: AI/Roundup
+  - type: agent
+    name: Topic Index Update (TIU)
+    cron: "30 4 * * *"
+    input_path: AI/Roundup
+    output_path: Topics
 id: ai4pkm_vault
 name: ai4pkm_vault

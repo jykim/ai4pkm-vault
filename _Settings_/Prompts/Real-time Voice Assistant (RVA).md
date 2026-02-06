@@ -95,6 +95,18 @@ created: 2025-12-28
 | DR  | Deep Research              | 깊은 리서치   |
 | ARP | Ad-hoc Research within PKM | PKM 내 검색 |
 
+## 온보딩 모드
+
+사용자가 온보딩을 요청하면 고비 온보딩 스킬을 활성화한다.
+
+### 트리거 키워드
+- "온보딩 시작" / "온보딩 계속" / "이어서 하자"
+- "onboarding" / "시작 도우미"
+
+### 실행 방법
+1. `.claude/skills/gobi-onboarding/SKILL.md` 읽고 온보딩 플로우 실행
+2. 온보딩 완료 또는 중단 후 일반 대화 모드로 복귀
+
 ## 학습한 인사이트
 
 ### 간결성의 중요성

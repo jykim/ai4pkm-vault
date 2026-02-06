@@ -42,6 +42,7 @@ NEVER proactively create documentation or README files.
   - `markdown-video` - Video generation from markdown
   - `gemini-image-skill` - Image generation with Gemini
   - `ai4pkm-helper` - AI4PKM specific helpers
+  - `gobi-onboarding` - Gobi Desktop 3.0 voice onboarding flow
 
 ## Search over files
 - For searching over topic or dates, start from `Topics` or `Roundup` folder
