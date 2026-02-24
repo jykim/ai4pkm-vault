@@ -54,6 +54,9 @@ nodes:
     input_path: _Settings_/History/Ambient
     output_path: AI/Canvas
     input_type: updated_file
+    output_type: update_file
+    output_naming: "{date} {title}.canvas"
+    trigger_cooldown: 60
     enabled: true
 id: ai4pkm_vault
 name: ai4pkm_vault

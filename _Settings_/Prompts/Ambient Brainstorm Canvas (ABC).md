@@ -14,10 +14,10 @@ updated: 2026-02-24
 
 ## Input
 - AmbientMode 녹취 파일: `_Settings_/History/Ambient/{{datetime}}.md`
-- 기존 캔버스 (있는 경우): `AI/Canvas/{{date}} 앰비언트 브레인스토밍.canvas`
+- 기존 캔버스 (있는 경우): `AI/Canvas/{{date}} {{main_topic}}.canvas`
 
 ## Output
-- 브레인스토밍 캔버스: `AI/Canvas/{{date}} 앰비언트 브레인스토밍.canvas`
+- 브레인스토밍 캔버스: `AI/Canvas/{{date}} {{main_topic}}.canvas`
 
 ## Process
 
@@ -55,6 +55,13 @@ updated: 2026-02-24
    - 💑 관계: 가족, 인간관계, 감정 관련
    - 💡 아이디어: 새로운 생각, 브레인스토밍
    - 📚 학습: 배움, 리서치 관련
+
+4. DERIVE CANVAS NAME
+   - 추출된 토픽 중 가장 핵심적인 주제를 1-3단어로 요약
+   - 캔버스 파일명에 사용: AI/Canvas/{{date}} {{main_topic}}.canvas
+   - 예시: "고비 브랜딩 논의", "스타트업 결심", "커뮤니티 비전"
+   - 한국어 기본, 핵심 키워드 중심으로 간결하게
+   - 기존 캔버스가 있으면 기존 파일명의 main_topic 유지
 ```
 
 ### Phase 2: 캔버스 레이아웃 생성
@@ -113,7 +120,10 @@ updated: 2026-02-24
 1. GENERATE CANVAS JSON
    {
      "nodes": [...],
-     "edges": [...]
+     "edges": [...],
+     "metadata": {
+       "version": "1.0-1.0"
+     }
    }
 
 2. NODE TYPES
@@ -143,8 +153,21 @@ updated: 2026-02-24
    7) 겹침 방지 체크 후 저장
 
 5. WRITE CANVAS FILE
-   - AI/Canvas/{{date}} 앰비언트 브레인스토밍.canvas에 저장
+   - AI/Canvas/{{date}} {{main_topic}}.canvas에 저장
    - 기존 캔버스가 있으면 MERGE (4번), 없으면 새로 생성
+   - 반드시 Atomic Write 패턴 사용 (tmp → rename)
+   - [[obsidian-brainstorming]] 스킬의 "Safe Canvas Writing" 참조
+
+6. METADATA (필수)
+   - 모든 캔버스에 metadata.version = "1.0-1.0" 포함 필수
+   - Obsidian이 캔버스를 인식하려면 이 필드가 반드시 있어야 함
+
+7. VALIDATION (저장 전 필수)
+   - JSON parse 성공 확인
+   - 모든 node에 id, type, x, y, width, height 존재 확인
+   - 모든 edge의 fromNode/toNode가 실제 node id를 참조하는지 확인
+   - metadata.version 존재 확인
+   - 중복 node id 없는지 확인
 ```
 
 ## Layout Patterns
@@ -307,7 +330,7 @@ fswatch -1 "_Settings_/History/Ambient/2026-02-19 15-19-01.md"
 
 ### One Recording = One Canvas
 - AmbientMode 녹음 파일 1개 = 캔버스 1개 (1:1 매핑)
-- 캔버스 파일명에 녹음 파일의 datetime 포함: `AI/Canvas/{{date}} 앰비언트 브레인스토밍.canvas`
+- 캔버스 파일명은 콘텐츠 기반 동적 생성: `AI/Canvas/{{date}} {{main_topic}}.canvas`
 - 같은 날짜의 여러 녹음이 있어도 날짜 기준으로 하나의 캔버스에 merge
 - 다른 프롬프트(ICB 등)가 동일 소스로 별도 캔버스를 생성하지 않도록 ABC가 AmbientMode의 유일한 캔버스 생성 주체
 
