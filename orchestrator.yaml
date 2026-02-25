@@ -50,13 +50,11 @@ nodes:
     input_path: AI/Roundup
     output_path: Topics
   - type: agent
-    name: Ambient Brainstorm Canvas (ABC)
+    name: Ambient Canvas Brainstorming (ACB)
     input_path: _Settings_/History/Ambient
     output_path: AI/Canvas
-    input_type: updated_file
-    output_type: update_file
-    output_naming: "{date} {title}.canvas"
-    trigger_cooldown: 60
+    input_type: new_file
+    output_naming: "{datetime} {title}.canvas"
     enabled: true
 id: ai4pkm_vault
 name: ai4pkm_vault

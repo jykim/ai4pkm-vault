@@ -1,6 +1,6 @@
 ---
-title: Ambient Brainstorm Canvas (ABC)
-abbreviation: ABC
+title: Ambient Canvas Brainstorming (ACB)
+abbreviation: ACB
 category: visualization
 created: 2025-12-31
 updated: 2026-02-24
@@ -14,25 +14,39 @@ updated: 2026-02-24
 
 ## Input
 - AmbientMode 녹취 파일: `_Settings_/History/Ambient/{{datetime}}.md`
-- 기존 캔버스 (있는 경우): `AI/Canvas/{{date}} {{main_topic}}.canvas`
+- 기존 캔버스 (있는 경우): `AI/Canvas/{{datetime}} {{main_topic}}.canvas`
 
 ## Output
-- 브레인스토밍 캔버스: `AI/Canvas/{{date}} {{main_topic}}.canvas`
+- 브레인스토밍 캔버스: `AI/Canvas/{{datetime}} {{main_topic}}.canvas`
 
 ## Process
 
-### Phase 0: 파일 모니터링 시작
+### Phase 0: 소스 파일 수신 및 모니터링
 
 ```
-1. FIND LATEST AMBIENT MODE FILE
-   - _Settings_/History/Ambient/ 폴더에서 가장 최근 파일 확인
-   - fswatch -1 으로 one-shot 모니터링 시작
+1. RECEIVE SOURCE FILE
+   - Orchestrator가 새 AmbientMode 파일 생성 시 트리거
+   - 소스 파일 경로: _Settings_/History/AmbientMode/{{datetime}}.md
+   - 파일 내용을 읽고 Phase 1-3 실행 (초기 캔버스 생성)
+   - canvas_path = Phase 1-3에서 생성한 캔버스 파일 경로 기억
 
-2. FILE CHANGE DETECTION LOOP
+2. MONITOR LOOP
+   last_content = 현재 파일 내용
    while true:
-     - fswatch -1 로 파일 변경 대기
-     - 변경 감지 시 Phase 1 실행
-     - 캔버스 업데이트 후 다시 모니터링
+     - 10초 대기 (sleep 10)
+     - 파일 다시 읽기
+     - IF 파일에 "RECORDING COMPLETED" 라인 존재:
+       → Phase 1-3 최종 실행 (canvas_path 재사용) 후 EXIT
+     - IF 내용이 last_content와 다름:
+       → last_content 갱신
+       → Phase 1-3 실행 (canvas_path 재사용하여 캔버스 업데이트)
+       → 타이머 리셋
+     - IF 60초간 변경 없음:
+       → EXIT (타임아웃)
+
+3. EXIT
+   - 종료 전 최종 캔버스 상태 저장 확인
+   - 로그: "ACB 세션 종료 (사유: timeout|recording_completed)"
 ```
 
 ### Phase 1: 콘텐츠 분석
@@ -58,10 +72,18 @@ updated: 2026-02-24
 
 4. DERIVE CANVAS NAME
    - 추출된 토픽 중 가장 핵심적인 주제를 1-3단어로 요약
-   - 캔버스 파일명에 사용: AI/Canvas/{{date}} {{main_topic}}.canvas
+   - 캔버스 파일명에 사용: AI/Canvas/{{datetime}} {{main_topic}}.canvas
    - 예시: "고비 브랜딩 논의", "스타트업 결심", "커뮤니티 비전"
    - 한국어 기본, 핵심 키워드 중심으로 간결하게
-   - 기존 캔버스가 있으면 기존 파일명의 main_topic 유지
+
+5. FIND EXISTING CANVAS
+   - IF canvas_path가 이미 설정됨 (MONITOR LOOP 재실행):
+     → canvas_path의 캔버스에 MERGE (Phase 3 step 4)
+   - ELSE (최초 실행):
+     → AI/Canvas/ 에서 이 소스 파일의 정확한 경로를 참조하는 캔버스만 검색
+     → 찾으면: MERGE + canvas_path 설정
+     → 못 찾으면: 새 캔버스 생성 + canvas_path 설정
+   - ⚠️ 다른 소스 파일의 캔버스에 merge 절대 금지 (같은 날짜여도)
 ```
 
 ### Phase 2: 캔버스 레이아웃 생성
@@ -153,8 +175,9 @@ updated: 2026-02-24
    7) 겹침 방지 체크 후 저장
 
 5. WRITE CANVAS FILE
-   - AI/Canvas/{{date}} {{main_topic}}.canvas에 저장
-   - 기존 캔버스가 있으면 MERGE (4번), 없으면 새로 생성
+   - AI/Canvas/{{datetime}} {{main_topic}}.canvas에 저장
+   - Phase 1 step 5에서 매칭된 기존 캔버스가 있으면 MERGE (4번)
+   - 매칭 안 되면 새 캔버스 생성 (같은 날짜의 다른 캔버스와 merge 금지)
    - 반드시 Atomic Write 패턴 사용 (tmp → rename)
    - [[obsidian-brainstorming]] 스킬의 "Safe Canvas Writing" 참조
 
@@ -319,20 +342,19 @@ updated: 2026-02-24
 
 ### 실행 예시
 ```bash
-# 앰비언트모드 파일 모니터링 시작
-fswatch -1 "_Settings_/History/Ambient/2026-02-19 15-19-01.md"
-
-# 파일 변경 감지 시 캔버스 업데이트
-# → Phase 1-3 실행
+# Orchestrator가 새 AmbientMode 파일 감지 시 ACB 자동 실행
+# ACB는 내부 루프로 파일 변경을 모니터링하며 캔버스 업데이트
+# 종료 조건: 60초 비활성 또는 "RECORDING COMPLETED" 감지
 ```
 
 ## Caveats
 
 ### One Recording = One Canvas
-- AmbientMode 녹음 파일 1개 = 캔버스 1개 (1:1 매핑)
-- 캔버스 파일명은 콘텐츠 기반 동적 생성: `AI/Canvas/{{date}} {{main_topic}}.canvas`
-- 같은 날짜의 여러 녹음이 있어도 날짜 기준으로 하나의 캔버스에 merge
-- 다른 프롬프트(ICB 등)가 동일 소스로 별도 캔버스를 생성하지 않도록 ABC가 AmbientMode의 유일한 캔버스 생성 주체
+- AmbientMode 녹음 파일 1개 = 캔버스 1개 (1:1 매핑, 엄격)
+- 캔버스 파일명은 콘텐츠 기반 동적 생성: `AI/Canvas/{{datetime}} {{main_topic}}.canvas`
+- 같은 녹음 파일의 업데이트만 기존 캔버스에 merge (ACB가 내부 루프로 모니터링)
+- 다른 녹음 파일은 같은 날짜여도 별도 캔버스 생성 (주제별 분리)
+- 다른 프롬프트(ICB 등)가 동일 소스로 별도 캔버스를 생성하지 않도록 ACB가 AmbientMode의 유일한 캔버스 생성 주체
 
 ### Skip Conditions
 - 의미없는 발화만 있는 경우 (감탄사, 외국어 테스트 등)
