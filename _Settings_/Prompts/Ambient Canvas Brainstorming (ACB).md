@@ -21,32 +21,19 @@ updated: 2026-02-24
 
 ## Process
 
-### Phase 0: 소스 파일 수신 및 모니터링
+### Phase 0: 소스 파일 수신
 
 ```
 1. RECEIVE SOURCE FILE
    - Orchestrator가 새 AmbientMode 파일 생성 시 트리거
-   - 소스 파일 경로: _Settings_/History/AmbientMode/{{datetime}}.md
-   - 파일 내용을 읽고 Phase 1-3 실행 (초기 캔버스 생성)
-   - canvas_path = Phase 1-3에서 생성한 캔버스 파일 경로 기억
+   - 소스 파일 경로: _Settings_/History/Ambient/{{datetime}}.md
+   - 파일 내용을 읽고 Phase 1-3 실행
 
-2. MONITOR LOOP
-   last_content = 현재 파일 내용
-   while true:
-     - 10초 대기 (sleep 10)
-     - 파일 다시 읽기
-     - IF 파일에 "RECORDING COMPLETED" 라인 존재:
-       → Phase 1-3 최종 실행 (canvas_path 재사용) 후 EXIT
-     - IF 내용이 last_content와 다름:
-       → last_content 갱신
-       → Phase 1-3 실행 (canvas_path 재사용하여 캔버스 업데이트)
-       → 타이머 리셋
-     - IF 60초간 변경 없음:
-       → EXIT (타임아웃)
-
-3. EXIT
-   - 종료 전 최종 캔버스 상태 저장 확인
-   - 로그: "ACB 세션 종료 (사유: timeout|recording_completed)"
+2. RE-EXECUTION (Orchestrator 자동 관리)
+   - 녹음 중 파일이 계속 업데이트됨
+   - Orchestrator가 실행 중 파일 변경 감지 시 자동 재실행 (retry: true)
+   - 재실행 시 기존 캔버스를 찾아 MERGE (Phase 1 Step 5)
+   - 파일 변경이 멈추면 자동 종료
 ```
 
 ### Phase 1: 콘텐츠 분석
@@ -77,12 +64,12 @@ updated: 2026-02-24
    - 한국어 기본, 핵심 키워드 중심으로 간결하게
 
 5. FIND EXISTING CANVAS
-   - IF canvas_path가 이미 설정됨 (MONITOR LOOP 재실행):
-     → canvas_path의 캔버스에 MERGE (Phase 3 step 4)
-   - ELSE (최초 실행):
-     → AI/Canvas/ 에서 이 소스 파일의 정확한 경로를 참조하는 캔버스만 검색
-     → 찾으면: MERGE + canvas_path 설정
-     → 못 찾으면: 새 캔버스 생성 + canvas_path 설정
+   - AI/Canvas/ 폴더에서 이 소스 파일과 매칭되는 캔버스 검색:
+     a) 소스 파일명에서 datetime 추출 (예: "2026-02-25 20-17-53")
+     b) AI/Canvas/ 에서 해당 datetime으로 시작하는 .canvas 파일 검색
+     c) 찾으면: 기존 캔버스 JSON 로드 → MERGE (Phase 3 step 4)
+     d) 못 찾으면: 새 캔버스 생성
+   - ⚠️ Orchestrator retry 시 이 경로로 기존 캔버스를 자동 재사용
    - ⚠️ 다른 소스 파일의 캔버스에 merge 절대 금지 (같은 날짜여도)
 ```
 
@@ -343,8 +330,9 @@ updated: 2026-02-24
 ### 실행 예시
 ```bash
 # Orchestrator가 새 AmbientMode 파일 감지 시 ACB 자동 실행
-# ACB는 내부 루프로 파일 변경을 모니터링하며 캔버스 업데이트
-# 종료 조건: 60초 비활성 또는 "RECORDING COMPLETED" 감지
+# 파일 변경 시 Orchestrator가 retry: true로 ACB 재실행
+# 재실행 시 기존 캔버스를 datetime 매칭으로 찾아 MERGE
+# 파일 변경이 멈추면 자동 종료
 ```
 
 ## Caveats
@@ -352,7 +340,7 @@ updated: 2026-02-24
 ### One Recording = One Canvas
 - AmbientMode 녹음 파일 1개 = 캔버스 1개 (1:1 매핑, 엄격)
 - 캔버스 파일명은 콘텐츠 기반 동적 생성: `AI/Canvas/{{datetime}} {{main_topic}}.canvas`
-- 같은 녹음 파일의 업데이트만 기존 캔버스에 merge (ACB가 내부 루프로 모니터링)
+- 같은 녹음 파일의 업데이트만 기존 캔버스에 merge (Orchestrator retry로 자동 관리)
 - 다른 녹음 파일은 같은 날짜여도 별도 캔버스 생성 (주제별 분리)
 - 다른 프롬프트(ICB 등)가 동일 소스로 별도 캔버스를 생성하지 않도록 ACB가 AmbientMode의 유일한 캔버스 생성 주체
 
