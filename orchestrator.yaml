@@ -56,5 +56,7 @@ nodes:
     input_type: new_file
     output_naming: "{datetime} {title}.canvas"
     enabled: true
+    max_parallel: 1
+    retry: true
 id: ai4pkm_vault
 name: ai4pkm_vault
