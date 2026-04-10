@@ -1,3 +1,8 @@
+---
+name: docx-to-markdown
+description: Convert DOCX files into markdown while preserving headings, lists, tables, metadata, and extracted images.
+---
+
 # DOCX to Markdown Skill
 
 Convert DOCX files to well-formatted markdown files with images extracted.

@@ -1,3 +1,8 @@
+---
+name: video-cleaning
+description: Clean spoken videos by transcribing them, detecting pauses and filler words, and generating edited outputs with a conservative Korean-focused workflow.
+---
+
 # Video Cleaning Skill
 
 Automated video transcription and editing workflow that removes pauses and filler words from Korean videos using OpenAI Whisper API and MoviePy for frame-accurate cuts.

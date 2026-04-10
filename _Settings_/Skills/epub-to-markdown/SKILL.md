@@ -1,3 +1,8 @@
+---
+name: epub-to-markdown
+description: Convert EPUB files into a single well-formatted markdown document with extracted metadata, table of contents, and images.
+---
+
 # EPUB to Markdown Skill
 
 Convert EPUB files to well-formatted single markdown files with images extracted.
