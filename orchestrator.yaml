@@ -1,4 +1,4 @@
-version: 0.0.29
+version: 0.0.30
 orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
@@ -41,6 +41,11 @@ nodes:
     input_pattern: "*.pdf|*.docx|*.doc|*.txt|*.epub"
     trigger_exclude_pattern: "*.md"
     output_naming: "{title}.md"
+    enabled: true
+  - type: agent
+    name: Daily Research Briefing (DRB)
+    cron: 0 7 * * *
+    output_path: AI/Briefing
     enabled: true
   - type: agent
     name: Generate Daily Roundup (GDR)

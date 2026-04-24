@@ -8,12 +8,12 @@ metadata:
   version: 1.2.0
   author: lifidea
   created: 2026-03-18
-  target_version: 0.0.29
+  target_version: 0.0.30
 ---
 
 # Gobi Migration Skill
 
-Set up a new AI4PKM vault from scratch **or** migrate an existing vault to v0.0.29. The skill operates in two modes:
+Set up a new AI4PKM vault from scratch **or** migrate an existing vault to v0.0.30. The skill operates in two modes:
 
 - **Fresh Install**: For new users — scaffolds the full vault structure, fetches all template files from GitHub, and runs onboarding
 - **Upgrade**: For existing users — detects the current version, identifies which structural epochs are needed, and applies changes incrementally with full backup safety
@@ -115,8 +115,8 @@ After confirming the vault root, determine which flow to use.
 **Decision tree**:
 
 - **Fresh Install**: No `orchestrator.yaml` AND no `_Settings_/` folder → run Fresh Install Flow
-- **Upgrade**: `orchestrator.yaml` exists, version < `0.0.29` → run existing epoch-based migration
-- **Up-to-date**: `orchestrator.yaml` exists, version == `0.0.29` → verify only, suggest `vault-update` for latest file content
+- **Upgrade**: `orchestrator.yaml` exists, version < `0.0.30` → run existing epoch-based migration
+- **Up-to-date**: `orchestrator.yaml` exists, version == `0.0.30` → verify only, suggest `vault-update` for latest file content
 
 **For Upgrade mode**, read `orchestrator.yaml` to determine the vault's current version.
 
@@ -124,7 +124,7 @@ After confirming the vault root, determine which flow to use.
 - `"1.0"` → original template (pre-epoch 1)
 - `"0.0.13"` through `"0.0.19"` → epoch 1 done, needs epoch 2+
 - `"0.0.20"` through `"0.0.25"` → epochs 1-2 done, needs epoch 3
-- `"0.0.26"` through `"0.0.29"` → fully up to date
+- `"0.0.26"` through `"0.0.30"` → fully up to date
 
 **Fallback signals** (if `version` is missing or `"1.0"`):
 
@@ -344,7 +344,7 @@ If user chooses option 1:
 ```bash
 git init
 git add -A
-git commit -m "Initial AI4PKM vault setup (v0.0.29)"
+git commit -m "Initial AI4PKM vault setup (v0.0.30)"
 ```
 
 ### Fresh Install Conflict Handling
@@ -738,7 +738,7 @@ Then compare sections and add any missing ones while preserving user customizati
 
 ---
 
-## Epoch 3: Polish (v0.0.20 → v0.0.29)
+## Epoch 3: Polish (v0.0.20 → v0.0.30)
 
 *Version bump, AGENTS.md Gobi sections, CLAUDE.md refinements, onboarding skill updates.*
 
@@ -768,7 +768,7 @@ done
 
 ### 3.4 Update Version to Target
 
-**Action**: Set `version: "0.0.29"` in `orchestrator.yaml`.
+**Action**: Set `version: "0.0.30"` in `orchestrator.yaml`.
 
 ### 3.5 Add id/name Fields
 
@@ -815,7 +815,7 @@ AGENTS.md is section-based (H2 headers). Merge strategy:
 3. **For each section only in user's file** → keep it (user-added content)
 4. **Flag conflicts**: If a section exists in both but content differs significantly, show both and let user choose
 
-**Key sections to ensure exist** (as of v0.0.29):
+**Key sections to ensure exist** (as of v0.0.30):
 - `## Core Mission & Principles`
 - `## Prompts & Workflows`
 - `## Skills`
@@ -839,10 +839,10 @@ CLAUDE.md should be agent-specific (Claude Code only), referencing AGENTS.md for
 
 ---
 
-## Target orchestrator.yaml Structure (v0.0.29)
+## Target orchestrator.yaml Structure (v0.0.30)
 
 ```yaml
-version: 0.0.29
+version: 0.0.30
 orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
@@ -933,7 +933,7 @@ migrations:
     name: Polish
     applied_at: 2026-03-18T10:10:00-07:00
     from_version: "0.0.20"
-    to_version: "0.0.29"
+    to_version: "0.0.30"
     steps_applied: [3.1, 3.2, 3.3, 3.4, 3.5]
     steps_skipped: []
 ```
@@ -946,7 +946,7 @@ migrations:
     name: Fresh Install
     applied_at: 2026-03-18T10:00:00-07:00
     from_version: null
-    to_version: "0.0.29"
+    to_version: "0.0.30"
     steps_applied: [FI-1, FI-2, FI-3, FI-4, FI-5, FI-6, FI-7]
     steps_skipped: []
 ```
@@ -981,7 +981,7 @@ After migration completes, verify:
 - [ ] `_Outbox_/BrainUpdates/` exists
 
 ### Orchestrator
-- [ ] `version` is `0.0.29`
+- [ ] `version` is `0.0.30`
 - [ ] No deprecated fields (STT/TTS/wakeword)
 - [ ] Has `chat_history_dir`, `ambient_recording_dir`, `file_extensions`
 - [ ] Has `captures_dir`, `capture_prompt_path`

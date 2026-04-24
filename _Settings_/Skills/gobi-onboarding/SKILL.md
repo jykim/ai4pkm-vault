@@ -2,10 +2,10 @@
 name: gobi-onboarding
 description: 고비 데스크탑 3.0 대화형 음성 온보딩 가이드
 metadata:
-  version: 3.14
+  version: 3.15
   author: lifidea
   created: 2026-02-04
-  updated: 2026-03-17
+  updated: 2026-04-24
 ---
 
 ## When to Use
@@ -67,6 +67,7 @@ metadata:
 | Video | 영상 변환 | 슬라이드를 자동으로 영상으로 만드는 것 | 3단계 |
 | Timeline | 시간순 보기 | 자료를 시간 순서대로 보는 달력 | Post-boarding |
 | Graph | 지식 그래프 | 자료 간 연결을 보여주는 지도 | 2단계 |
+| 홈페이지 (CBH) | 브레인 홈페이지 | 내 브레인의 공개 대문 (gobispace.com/@슬러그) | 4단계 |
 
 ## Pre-boarding (온보딩 진입 조건)
 
@@ -435,6 +436,13 @@ npm install -g @gobi-ai/cli
 
 > 볼트를 커뮤니티에 연결할게요. 잠시만요.
 
+**`gobi init`은 인터랙티브 명령**이라 에이전트가 stdin을 파이핑하면 "User force closed the prompt"로 실패한다. 두 가지 방법 중 하나를 선택:
+
+1. **사용자가 터미널에서 직접 실행** (권장): "`gobi init`을 터미널에서 실행하고 'Select an existing vault' 또는 'Create a new vault' 중 선택 후 돌아와주세요."
+2. **expect 자동화** (환경에 `/usr/bin/expect`가 있는 경우): 사용자에게 vault ID(slug)를 먼저 묻고, expect 스크립트로 `"How would you like"` → 화살표+엔터로 옵션 선택 → `"unique vault ID"` / `"vault name"` 프롬프트에 slug 입력. vault 이름 중복 시 재입력을 요구하므로 실패 가능성을 설명한다.
+
+완료 후 `.gobi/settings.yaml`에 `vaultSlug` 확인.
+
 ### 4-4. 스페이스 선택
 
 `.gobi/settings.yaml`에서 `selectedSpaceSlug` 존재 여부를 확인한다.
@@ -444,8 +452,8 @@ npm install -g @gobi-ai/cli
 
 > 어떤 커뮤니티 스페이스에 참여할지 선택해볼게요.
 
-1. `gobi space list`로 가용 스페이스 목록 조회하여 보여준다
-2. `gobi space warp`으로 스페이스 선택 (인터랙티브)
+1. `gobi space list`로 가용 스페이스 목록을 조회해 번호/슬러그와 함께 보여준다
+2. 사용자가 선택하면 `gobi space warp <slug>`로 즉시 워프 (슬러그를 인자로 주면 인터랙티브 프롬프트 없이 바로 선택됨)
 
 > 스페이스는 관심사가 비슷한 사람들이 모인 공간이에요. 나중에 언제든 바꿀 수 있어요.
 
@@ -456,15 +464,85 @@ npm install -g @gobi-ai/cli
 > 프로필을 커뮤니티에 공개할게요. 명함을 교환하듯이 다른 전문가들이 나를 찾을 수 있어요.
 
 - 실행 후 결과를 확인하고 완료를 알린다.
+- 간헐적으로 `Error: fetch failed` 발생 시 한 번 더 재시도.
 - 사용자 거절 시: "괜찮아요. 나중에 '브레인 퍼블리시'라고 말하면 언제든 공개할 수 있어요."
 
-### 4-6. Welcome 스레드 (선택)
+### 4-6. 브레인 홈페이지 만들기 (CBH, 선택)
 
-선택한 스페이스에 자기소개 스레드를 작성할지 묻는다.
+브레인의 공개 대문을 꾸민다. CBH(Create Brain Homepage)로 `app/home.html`을 생성하고 웹드라이브에 올려, `gobispace.com/@{vaultSlug}` 접속 시 커스텀 페이지가 렌더링되도록 한다.
 
-> 커뮤니티에 인사를 남길까요? 간단한 자기소개 스레드를 만들어드릴 수 있어요.
+> 프로필에 어울리는 브레인 홈페이지를 만들어드릴까요?
+> 내 브레인의 공개 대문이에요. 다른 사람들이 방문하면 이 페이지가 보여요. 건너뛰어도 돼요.
 
-- **사용자 동의 시**: `gobi space create-thread`로 스레드 생성. BRAIN.md 프로필 정보를 바탕으로 간결한 인사 스레드를 작성한다.
+#### 사용자 응답 시나리오
+
+##### A. 만들기 동의 (테마 질문)
+- 사용자: "네" / "만들어줘"
+- 에이전트: "좋아요! 어떤 느낌으로 꾸밀까요? 예를 들어 '조선시대', '미니멀 다크', '파스텔', '사이버펑크' 같은 테마가 있어요. 아니면 '알아서 해줘'도 돼요."
+- 사용자가 테마 지정 시: 해당 테마에 맞춰 진행
+- "알아서 해줘" 시: BRAIN.md의 프로필(직업, 관심사, 톤)에서 테마를 추론
+
+##### B. 건너뛰기
+- 사용자: "나중에" / "스킵"
+- 에이전트: "알겠어요. 나중에 '홈페이지 만들어줘' 또는 'CBH'라고 말하면 언제든 만들 수 있어요."
+- (4-7로 전환)
+
+#### 실행 절차
+
+**Pre-check**: `_Settings_/Prompts/Create Brain Homepage (CBH).md` 파일이 존재하는지 확인. 없으면 `gobi-homepage` 스킬(`@gobi-ai/cli/skills/gobi-homepage/SKILL.md`)을 참조해 동일 설계로 생성.
+
+1. **홈페이지 생성**
+   - `app/` 폴더 생성 (`mkdir -p app`)
+   - CBH 프롬프트 가이드에 따라 `app/home.html` 생성 (단일 HTML 파일, 모든 CSS/JS 인라인, CDN만 허용)
+   - 섹션 순서 준수: Hero (프로필 + K-Graph) → Brain Updates → Chat → Footer
+   - 테마에 맞춰 색/폰트를 변경하되, `window.gobi.*` API 사용 패턴은 유지
+
+2. **BRAIN.md에 homepage 속성 추가**
+   - frontmatter에 `homepage: "[[app/home.html]]"` 추가
+   - 전체화면 모드 원하는 경우: `homepage: "[[app/home.html?nav=false]]"`
+
+3. **`.gobi/syncfiles`에 경로 추가 (CRITICAL)**
+   - **패턴은 반드시 `/`로 시작**해야 한다 (예: `/app/home.html`). `app/home.html`처럼 상대 경로로 쓰면 서버가 `HTTP 400: Pattern must start with '/'`로 거부한다.
+   - 기존 BRAIN 파일 3종(`/BRAIN.md`, `/BRAIN_PROMPT.md`, `/BRAIN.jpg`)은 그대로 두고 `/app/home.html`만 추가한다.
+
+4. **동기화 & 재퍼블리시**
+   - `gobi sync` — 홈페이지 파일 업로드 (Gobi Desktop의 백그라운드 sync가 이미 업로드했을 수 있어 `0 action(s)`로 나올 수 있음. 실제 업로드 여부는 서버 hash 일치로 판단)
+   - `gobi brain publish` — homepage 속성이 포함된 BRAIN.md 재배포 (이 단계를 빼먹으면 서버는 예전 BRAIN.md 기준으로 홈페이지를 렌더하지 못한다)
+
+5. **결과 확인**
+   - `obsidian_enabled = true`인 경우 `obsidian open path="app/home.html"`로 로컬 파일 열기
+   - `curl -s "https://www.gobispace.com/@{vaultSlug}"`로 페이지가 200 OK로 서빙되는지 가볍게 검증
+   - URL을 사용자에게 알려준다: "완료! `gobispace.com/@{vaultSlug}`에서 확인할 수 있어요."
+
+#### CBH 구현 필수 체크리스트
+
+홈페이지 제작 시 자주 틀리는 포인트 — 완성 전에 아래를 검증한다:
+
+- [ ] `gobi.vault`는 **동기** 접근. 스크립트 상단에서 바로 사용 가능 (`await` 불필요).
+- [ ] 세션 객체 필드는 `sessionId`이지 `id`가 아니다 — `sessions[0].sessionId`로 접근.
+- [ ] 새 세션 시작: `if (!sessionId) sessionId = crypto.randomUUID();` — 서버가 lazy 생성.
+- [ ] 메시지 role 값은 `'human' | 'assistant'` — `'user'` 아님.
+- [ ] BU 콘텐츠 렌더링은 `marked.parse(resolveWikiImages(content))` 사용. 프리뷰는 `escapeHtml(content.substring(0, 200))` — substring 결과에 marked를 돌리면 깨진 HTML 생성.
+- [ ] 모든 `<a>`에 `target="_blank" rel="noopener"` 주입. 홈페이지는 sandboxed iframe이라 기본 링크 클릭 시 iframe 자체가 교체된다.
+- [ ] `fetch()` / `XMLHttpRequest` 금지 (CORS 차단). 모든 데이터 접근은 `window.gobi.*`.
+- [ ] K-Graph: BU 8개는 그래프가 빈약하므로 2-3회 페이지네이션으로 최대 32개 수집 후 빌드.
+- [ ] K-Graph 풀스케일 오버레이는 노드/링크를 **복사**해 독립 시뮬레이션 실행 (참조 공유 시 두 그래프가 서로 위치 재계산 충돌).
+- [ ] Footer 링크: `https://www.gobispace.com/@{slug}?og=1` (`?og=1`로 OG 메타 포함).
+- [ ] 모바일 반응형: 768px 브레이크포인트 하나로 충분 (hero-grid, updates-grid → 1 column).
+
+#### 재생성 요청
+
+- 사용자: "다시 만들어줘" / "다른 테마로"
+- 에이전트: "어떤 테마로 바꿀까요?" 재질문 후 동일 절차 반복. `app/home.html`을 덮어쓰고 `gobi sync`만 재실행하면 된다 (BRAIN.md 변경 없으면 `gobi brain publish` 생략 가능).
+
+### 4-7. Welcome 스레드 / BU (선택)
+
+선택한 스페이스에 자기소개를 남길지 묻는다. 스레드(`gobi space create-thread`)와 브레인 업데이트(`gobi brain post-update`) 두 가지 형식 모두 가능.
+
+> 커뮤니티에 인사를 남길까요? 스레드나 브레인 업데이트로 간단히 올려드릴 수 있어요.
+
+- **스레드 요청 ("스레드 올려줘")**: `gobi space create-thread`로 BRAIN.md 프로필 정보 기반 인사 스레드 작성
+- **BU 요청 ("BU 올려줘" / "브레인 업데이트")**: `gobi brain post-update --title "..." --content "..."`로 BU 게시 (프로필 톤에 맞춘 1인칭 소개)
 - **사용자 거절/건너뛰기 시**: "알겠어요, 나중에 언제든 인사를 남길 수 있어요."
 
 ### 완료 확인 & 전환
@@ -482,12 +560,14 @@ npm install -g @gobi-ai/cli
 
 > 프로필을 커뮤니티와 동기화하면 명함을 교환하듯이 다른 전문가들이 나를 찾을 수 있어요. 동기화할까요?
 
-- 사용자 동의 시: `.gobi/syncfiles`에 아래 파일 추가
-  - `BRAIN.md` (프로필)
-  - `BRAIN_PROMPT.md` (커뮤니티 에이전트 프롬프트 — 존재하는 경우)
-  - `BRAIN_PROFILE.md` (상세 프로필 — 존재하는 경우)
-  - `BRAIN.jpg` (프로필 이미지 — 존재하는 경우)
-  - **사용자가 동의하면 즉시 실행한다.** syncfiles 명령 실행 후 결과를 확인하고 사용자에게 완료를 알린 뒤 다음으로 진행한다.
+- 사용자 동의 시: `.gobi/syncfiles`에 아래 파일 추가 (모든 패턴은 **`/`로 시작**)
+  - `/BRAIN.md` (프로필)
+  - `/BRAIN_PROMPT.md` (커뮤니티 에이전트 프롬프트 — 존재하는 경우)
+  - `/BRAIN_PROFILE.md` (상세 프로필 — 존재하는 경우)
+  - `/BRAIN.jpg` (프로필 이미지 — 존재하는 경우)
+  - `/app/home.html` (4-6 CBH로 생성한 경우)
+  - **사용자가 동의하면 즉시 실행한다.** syncfiles 수정 후 `gobi sync`를 실행하고 결과를 확인한 뒤 다음으로 진행한다.
+  - **주의**: 패턴을 `BRAIN.md`처럼 `/` 없이 쓰면 서버가 `HTTP 400: Pattern must start with '/'`로 거부한다.
 - 사용자 거절/무응답 시: "괜찮아요, 나중에 마음이 바뀌면 '프로필 동기화'라고 말해주세요."
 
 ### 5-2. 완료/건너뛴 항목 정리
@@ -499,6 +579,7 @@ npm install -g @gobi-ai/cli
   - 글 작성: "'글 써줘'라고 말하면 돼요"
   - 영상 만들기: "'영상 만들어줘'라고 말하면 돼요"
   - 프로필 동기화: "'프로필 동기화'라고 말하면 돼요"
+  - 홈페이지 만들기: "'홈페이지 만들어줘' 또는 'CBH'라고 말하면 돼요"
 
 ### 5-3. Post-boarding Discovery
 
@@ -513,6 +594,7 @@ npm install -g @gobi-ai/cli
 | "웹 클리퍼" | Obsidian Web Clipper 설치 안내 |
 | "브레인 탐색" | Brain Network Discovery |
 | "영상 만들기" | Video 파이프라인 |
+| "홈페이지 만들기" / "CBH" | 브레인 홈페이지 생성/재생성 |
 | "옵시디언 설치" | 옵시디언 설치 가이드 (미연동 시) |
 
 ### 클로징 스크립트

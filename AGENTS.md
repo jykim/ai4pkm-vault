@@ -31,6 +31,13 @@ NEVER proactively create documentation or README files.
 - Each command can be called using abbreviations
 - Check this first for new command (especially if it's abbreviations)
 
+## Cross-Framework Awareness
+- This vault is **interoperable** with the [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files) framework by convention, not by merger. The two frameworks have different frontmatter schemas, folder taxonomies, and wikilink rules.
+- When you encounter content authored under cmds conventions (numeric folders `100`–`900`, `date created` / `date modified` frontmatter, emoji-prefixed wikilinks, English `description` field), treat it as **valid-but-foreign**. Do not rewrite it to ai4pkm conventions unless the user asks.
+- Mirrored cmds rules live in `_Settings_/Guidelines/cmds-system-files/` as read-only reference (see its README for source commit SHA and refresh command).
+- Full gap analysis, 4-option comparison, and translation cheat-sheet are kept in the owner's personal vault: `OVM/AI/Analysis/2026-04-21 CMDS x ai4pkm Compatibility Analysis - Claude Code.md` (not checked into this template).
+- The authoritative rules for THIS vault remain in `AGENTS.md` (this file), `CLAUDE.md`, and `GEMINI.md`.
+
 ## Skills
 - Skills are located in `_Settings_/Skills/`
 - Each skill folder contains a `SKILL.md` with instructions
