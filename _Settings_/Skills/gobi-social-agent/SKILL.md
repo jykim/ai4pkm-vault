@@ -1,17 +1,18 @@
 ---
 name: gobi-social-agent
 description: >-
-  Reactive social agent for Gobi Space and Gobi Desktop. Periodically (default
-  every 30 min) scans the user's recent vault activity and the Gobi community
-  folder, then drafts a social post that responds to what the community is
-  discussing. Produces Brain Update drafts, new Thread drafts, or Reply drafts
-  to existing community threads — always gated by user approval. Use when the
-  user wants to monitor community context and surface draft responses, or says
+  Reactive social agent for Gobi Space and Gobi Desktop. Invoked as the final
+  step of the DDW (Daily Driver Workflow) pipeline or on demand. Scans the
+  user's recent vault activity and the Gobi community folder, then drafts a
+  social post that responds to what the community is discussing. Produces
+  Brain Update drafts, new Thread drafts, or Reply drafts to existing community
+  threads in `_Gobi_/GSA/` — always gated by user approval. Use when the user
+  wants to monitor community context and surface draft responses, or says
   "GSA 돌려줘" / "run the social agent" / "draft a reply to community threads".
 allowed-tools: Bash(python3:*), Read, Glob, Grep, Write, Edit
 metadata:
   author: ai4pkm
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Gobi Social Agent (GSA)
@@ -20,8 +21,8 @@ metadata:
 
 ## When to use
 
+- DDW 파이프라인의 마지막 단계로 자동 호출 (`MCE → PLL → MER → ULC → GSA`)
 - 사용자가 "GSA 돌려줘", "소셜 에이전트 한 번 돌려", "커뮤니티에 뭐 답할 거 있나 봐줘"라고 요청할 때
-- cron/orchestrator가 주기적으로 호출할 때 (30분 간격 권장)
 - 사용자가 최근 커뮤니티 스레드/BU에 대해 "내가 뭘 답할 수 있나"를 물을 때
 
 ## When NOT to use
@@ -38,11 +39,16 @@ metadata:
 
 ## Outputs
 
-| 종류 | 경로 | 형식 |
+모든 드래프트는 `_Gobi_/GSA/` 한 폴더에 모인다 (리뷰·승인 편의).
+
+| 종류 | 파일명 형식 | 참고 |
 |---|---|---|
-| BU 드래프트 | `_Outbox_/BrainUpdates/YYYY-MM-DD [제목] - Agent.md` | PBU와 동일 |
-| Thread/Reply | `AI/Sharable/YYYY-MM-DD [제목] Threads - Agent.md` | CTP와 동일 |
-| Skip 로그 | `_state.json` | `kind: skip` + note |
+| BU 드래프트 | `_Gobi_/GSA/YYYY-MM-DD [제목] - BU.md` | PBU 포맷 |
+| Thread 드래프트 | `_Gobi_/GSA/YYYY-MM-DD [제목] - Thread.md` | CTP 포맷 |
+| Reply 드래프트 | `_Gobi_/GSA/YYYY-MM-DD [제목] - Reply-<thread-id>.md` | `reply_to_thread` 포함 |
+| Skip 로그 | `_state.json`에 `kind: skip` + note | 파일 생성 안 함 |
+
+리뷰 뷰: `_Settings_/Bases/GSA Drafts.base` (Pending Review / Approved / All 탭).
 
 Frontmatter는 항상 `approve_for_publish: false` — 발행은 사용자 승인 후 수동.
 
@@ -59,7 +65,7 @@ python3 _Settings_/Skills/gobi-social-agent/scripts/collect_signals.py \
 
 출력 JSON:
 - `my_signals`: 내 최근 파일 (path, title, modified, tags, preview, already_used)
-- `community_signals`: `_Gobi_/` 폴더의 BU/Thread (타 사용자 포스트 포함)
+- `community_signals`: `_Gobi_/BrainUpdates/`, `_Gobi_/Threads/` (타 사용자 포스트)
 
 옵션:
 - `--vault <path>`: 볼트 루트 명시 (기본: CWD)
@@ -97,14 +103,15 @@ python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
 
 ### Step 4 — Generate draft
 
+파일은 모두 `_Gobi_/GSA/`에 생성. 파일명 suffix(` - BU.md` / ` - Thread.md` / ` - Reply-<id>.md`)로 종류 구분.
+
 **BU** → `Post Brain Update (PBU)` 프롬프트 로직:
-- `_Outbox_/BrainUpdates/YYYY-MM-DD [제목] - Agent.md` 생성
 - 400–800단어 에세이, H2 없이 본문 시작
 - 원문 인용 블록쿼트, 마무리 `→ **관련 분석**: [[...]]`
 
 **Thread/Reply** → `Create Thread Postings (CTP)` 프롬프트 로직:
-- `AI/Sharable/YYYY-MM-DD [제목] Threads - Agent.md` 생성
 - Social Media Template (Overview → Contents → Sources)
+- 각 thread 1k자 이하, 자체 완결형
 - Reply면 frontmatter에 `reply_to_thread: <thread-id>` 기록
 
 **Frontmatter 필수 필드**:
@@ -113,16 +120,20 @@ python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
 ---
 title: "..."
 date: YYYY-MM-DD
+post_kind: bu              # bu | thread | reply
 source_file: "path/to/source"
 generated_by: GSA
 approve_for_publish: false
 approve_for_thread: false
+reply_to_thread: ""        # reply일 때만 값 채움
 community_context:
   - "_Gobi_/... — 비슷한 토픽"
   - "_Gobi_/... — 관련 논의 중"
 tags: [...]
 ---
 ```
+
+`post_kind`와 `reply_to_thread`는 `_Settings_/Bases/GSA Drafts.base`의 컬럼으로 사용되니 항상 포함.
 
 `community_context`는 승인자가 "커뮤니티에 이미 돌고 있는 얘기인지" 판단하기 위한 주석.
 
@@ -132,7 +143,7 @@ tags: [...]
 python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
   --kind bu \
   --source "AI/Analysis/YYYY-MM-DD ... - Agent.md" \
-  --draft "_Outbox_/BrainUpdates/YYYY-MM-DD ... - Agent.md"
+  --draft "_Gobi_/GSA/YYYY-MM-DD ... - BU.md"
 ```
 
 `--kind` 값: `bu` | `thread` | `skip`
@@ -140,8 +151,20 @@ python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
 ### Step 6 — Open draft (optional)
 
 ```bash
-open "obsidian://open?vault=<VAULT_NAME>&file=_Outbox_/BrainUpdates/..."
+open "obsidian://open?vault=<VAULT_NAME>&file=_Gobi_/GSA/..."
 ```
+
+또는 사용자가 `_Settings_/Bases/GSA Drafts.base` 뷰에서 일괄 리뷰.
+
+## Review & Approval Flow
+
+1. GSA가 `_Gobi_/GSA/`에 드래프트 생성 (`approve_for_publish: false`)
+2. 사용자가 `_Settings_/Bases/GSA Drafts.base`의 **Pending Review** 탭에서 일괄 조망
+3. 파일 열어 검토 후 frontmatter 플래그 flip:
+   - `approve_for_publish: true` → Gobi 발행 대상
+   - `approve_for_thread: true` → Thread 발행 대상
+4. 발행은 별도 수동 단계: `gobi brain post-update --auto-attachments ...`
+5. 승인된 항목은 **Approved** 탭으로 이동 (동일 base 필터)
 
 ## Principles
 
@@ -162,29 +185,35 @@ open "obsidian://open?vault=<VAULT_NAME>&file=_Outbox_/BrainUpdates/..."
 - 발행은 별도 단계: `gobi brain post-update --auto-attachments ...`
 
 ### Rate limit
-- 30분 cron이어도 실제 생성은 하루 2–4개 수준이 적정
+- DDW가 30분마다 부르지만 실제 생성은 하루 2–4개 수준이 적정
 - 2시간 쿨다운 (마지막 드래프트 후)
-- `working_hours`로 야간 생성 억제
+- 야간 시간대는 내부 SKIP 판단으로 억제
 
-## Cron integration
+## DDW integration
 
-`orchestrator.yaml` 예시:
+GSA는 DDW 파이프라인의 마지막 단계로 호출된다:
 
-```yaml
-- type: agent
-  name: gobi-social-agent
-  cron: "*/30 * * * *"
-  working_hours: "09:00-22:00"
-  agent_params:
-    hours: 24
-    days: 3
+```
+MCE → PLL → MER → ULC → GSA
+```
+
+DDW prompt (`_Settings_/Prompts/Daily Driver Workflow (DDW).md`)의 Step 5 참고. 별도 cron 등록 불필요.
+
+수동 실행 시에도 동일한 scripts + 워크플로우:
+
+```bash
+python3 _Settings_/Skills/gobi-social-agent/scripts/collect_signals.py --hours 24 --days 3
+# Agent가 Step 2~4 판단 & 작성
+python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py --kind bu --source ... --draft ...
 ```
 
 ## Related
 
+- `Daily Driver Workflow (DDW)` — GSA를 자동 호출하는 상위 파이프라인
 - `Post Brain Update (PBU)` — 단일 소스 BU 생성 (GSA의 Step 4에서 재사용)
 - `Create Thread Postings (CTP)` — Thread 후보 생성 (GSA의 Step 4에서 재사용)
 - `Social Discovery Bot (SDB)` — 외부 플랫폼(X/Threads) 발견용 (GSA는 내부 커뮤니티 전용, 보완 관계)
+- `_Settings_/Bases/GSA Drafts.base` — 리뷰·승인 뷰
 
 ## Files
 
@@ -196,4 +225,7 @@ _Settings_/Skills/gobi-social-agent/
 │   └── update_state.py
 └── state/
     └── _state.json       # runtime-generated
+
+_Gobi_/GSA/               # drafts live here
+_Settings_/Bases/GSA Drafts.base   # review view
 ```
