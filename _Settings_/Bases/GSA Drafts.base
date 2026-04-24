@@ -19,7 +19,6 @@ views:
       - source_file
       - community_context
       - approve_for_publish
-      - approve_for_thread
       - tags
     sort:
       - property: file.ctime
@@ -38,13 +37,12 @@ views:
       - file.ctime
       - post_kind
       - approve_for_publish
-      - approve_for_thread
       - tags
     sort:
       - property: file.ctime
         direction: DESC
     columnSize:
-      file.name: 420
+      file.name: 160
       post_kind: 80
   - type: table
     name: All
@@ -57,7 +55,6 @@ views:
       - file.ctime
       - post_kind
       - approve_for_publish
-      - approve_for_thread
       - reply_to_thread
       - source_file
       - tags
@@ -65,5 +62,5 @@ views:
       - property: file.ctime
         direction: DESC
     columnSize:
-      file.name: 420
+      file.name: 160
       post_kind: 80

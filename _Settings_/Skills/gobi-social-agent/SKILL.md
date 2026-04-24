@@ -124,7 +124,6 @@ post_kind: bu              # bu | thread | reply
 source_file: "path/to/source"
 generated_by: GSA
 approve_for_publish: false
-approve_for_thread: false
 reply_to_thread: ""        # reply일 때만 값 채움
 community_context:
   - "_Gobi_/... — 비슷한 토픽"
@@ -160,10 +159,10 @@ open "obsidian://open?vault=<VAULT_NAME>&file=_Gobi_/GSA/..."
 
 1. GSA가 `_Gobi_/GSA/`에 드래프트 생성 (`approve_for_publish: false`)
 2. 사용자가 `_Settings_/Bases/GSA Drafts.base`의 **Pending Review** 탭에서 일괄 조망
-3. 파일 열어 검토 후 frontmatter 플래그 flip:
-   - `approve_for_publish: true` → Gobi 발행 대상
-   - `approve_for_thread: true` → Thread 발행 대상
-4. 발행은 별도 수동 단계: `gobi brain post-update --auto-attachments ...`
+3. 파일 열어 검토 후 frontmatter 플래그 flip: `approve_for_publish: true`
+4. 발행은 별도 수동 단계 (`post_kind`에 따라 분기):
+   - `bu` → `gobi brain post-update --auto-attachments ...`
+   - `thread` / `reply` → `gobi space thread create ...` 또는 `gobi space reply ...`
 5. 승인된 항목은 **Approved** 탭으로 이동 (동일 base 필터)
 
 ## Principles
