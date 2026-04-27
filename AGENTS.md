@@ -38,6 +38,14 @@ NEVER proactively create documentation or README files.
 - Full gap analysis, 4-option comparison, and translation cheat-sheet are kept in the owner's personal vault: `OVM/AI/Analysis/2026-04-21 CMDS x ai4pkm Compatibility Analysis - Claude Code.md` (not checked into this template).
 - The authoritative rules for THIS vault remain in `AGENTS.md` (this file), `CLAUDE.md`, and `GEMINI.md`.
 
+## Cross-Framework Philosophy (Adopted from cmds-system-files)
+- Quick summary of what ai4pkm has _absorbed_ from cmds. For the full cheat-sheet (with source quotes and reverse-links into skills), see `_Settings_/Guidelines/CMDS-PRINCIPLES.md`.
+- **Description as LLM hint**: `description` (one-line, English, action-oriented) in frontmatter is a routing signal for AI agents — not a human summary. Optional but recommended for analysis docs and prompts. → `obsidian-yaml-frontmatter` skill.
+- **Atomic compression**: prefer small, single-idea notes (target ~9–50 lines for permanent notes). Long monoliths should be split. Mental model only — no enforcement.
+- **Artifact separation**: keep `node_modules/`, render outputs, build artifacts, and venvs **outside** the vault root (e.g., in `~/dev/<project>/`). Reduces Obsidian indexing cost and search noise.
+- **4-stage document lifecycle**: think of every note as moving through Connect → Merge → Develop → Share. Maps loosely to existing ai4pkm prompts (EIC enters Connect, GDR sits at Merge, TIU at Develop, PBU at Share). → `obsidian-markdown-structure` skill, optional `stage:` frontmatter key.
+- **Whitespace formalization**: prevent renderer ambiguity by formalizing indentation rules. ai4pkm uses 2-space YAML, blank-line-before-table, etc. — these are explicit, not negotiable per file.
+
 ## Skills
 - Skills are located in `_Settings_/Skills/`
 - Each skill folder contains a `SKILL.md` with instructions

@@ -262,3 +262,34 @@ Before completing link operations:
 - [ ] Section headers verified (not guessed)
 - [ ] Topic links point to existing topic pages
 - [ ] Broken links identified and fixed
+
+## Optional: cmds-Style Emoji Prefixes
+
+When linking to content authored under [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files) conventions (filenames begin with 📜 / 📚 / 🏛 / 🏷 / 📎 / 📦 / 🔖 / 📈 etc.), the **emoji is part of the filename** and must be preserved in the wikilink.
+
+### Why this matters
+
+```markdown
+✅ CORRECT: [[📜 Schema는 Harness다 보고서]]
+❌ WRONG:   [[Schema는 Harness다 보고서]]   # missing 📜 → broken link
+```
+
+Stripping the emoji creates a **broken link**. In a cmds vault, Obsidian then auto-creates an empty placeholder file in `00. Inbox/` when the link is clicked, polluting the inbox with orphans. Native ai4pkm content has no such risk (no emoji-prefix convention), but cross-vault references must respect cmds conventions.
+
+### Aliased form for clean rendering
+
+If you want to hide the emoji from display, use the aliased form — the link still resolves because the target before `|` is exact:
+
+```markdown
+[[📜 Schema는 Harness다 보고서|Schema는 Harness다]]
+```
+
+### When this applies
+
+- **ai4pkm-native files**: emoji prefixes are NOT required and NOT enforced. Continue using `[[YYYY-MM-DD Title]]` without emoji.
+- **Cross-vault links to cmds content**: include the exact emoji prefix.
+- **Imported cmds files**: keep the emoji in the filename when copying into ai4pkm (rename only if user explicitly requests).
+
+### Verification rule
+
+Before writing a wikilink to any file you suspect originates from cmds, run a Glob/Bash check to confirm the exact filename **including any emoji**. Never guess at emoji presence.
