@@ -429,12 +429,55 @@ function showDayOnMap(dayNum) {
 //     ${gmapsUrl ? `<a class="gmaps-route" href="${gmapsUrl}" target="_blank" rel="noreferrer">🗺️ Google Maps Route</a>` : ""}
 //   </div>
 //
-// And add a click delegate on #itinerary:
+// Use a generic [data-show-day] click delegate so BOTH the action button AND
+// the day-number circle in .day-head trigger the same map zoom:
 //   document.getElementById("itinerary").addEventListener("click", event => {
-//     const button = event.target.closest("button[data-show-day]");
-//     if (button) showDayOnMap(Number(button.dataset.showDay));
+//     const trigger = event.target.closest("[data-show-day]");
+//     if (trigger) showDayOnMap(Number(trigger.dataset.showDay));
 //   });
 ```
+
+### Date-Based Day Buttons + Sidebar Scroll
+
+When the trip has dates (e.g. multi-week guides), label the top day-filter buttons with the date (`M/D`) instead of generic `D1..DN`. Clicking a date should both (a) filter the map and (b) scroll the sidebar to the corresponding day card — pairing map zoom and itinerary focus in one click.
+
+```js
+// Render: use the M/D portion of day.date as the button label
+document.getElementById("dayControls").innerHTML = `<button class="active" data-day="all">All</button>${days.map(day => `<button data-day="${day.day}" title="Day ${day.day} — ${day.date}">${day.date.split(' ')[0]}</button>`).join("")}`;
+
+// Click delegate: filter map + scroll sidebar to the matching day card
+document.getElementById("dayControls").addEventListener("click", event => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  document.querySelectorAll("#dayControls button").forEach(item => item.classList.remove("active"));
+  button.classList.add("active");
+  const dayVal = button.dataset.day;
+  draw(dayVal === "all" ? "all" : Number(dayVal));
+  if (dayVal === "all") return;
+  const card = document.querySelector(`.day-card[data-card-day="${dayVal}"]`);
+  const sidebar = document.querySelector(".sidebar");
+  if (!card || !sidebar) return;
+  document.querySelectorAll(".day-card.active-card").forEach(item => item.classList.remove("active-card"));
+  card.classList.add("active-card");
+  sidebar.scrollTo({ top: card.offsetTop - 16, behavior: "smooth" });
+});
+```
+
+### Clickable Day Number → Zoom Map
+
+Make the `.day-number` circle in `.day-head` a cheap click target that zooms the map to that day (mirrors the `📍 Show on Map` button without the extra row). Add `data-show-day="${day.day}"` to the div and rely on the generic `[data-show-day]` delegate above.
+
+```css
+.day-number { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+.day-number:hover { transform: scale(1.08); box-shadow: 0 4px 14px rgba(0,0,0,.22); }
+```
+
+```js
+// Inside the day-head template:
+//   <div class="day-number" data-show-day="${day.day}" title="Zoom map to Day ${day.day}" style="background:${dayColors[day.day]}">${day.day}</div>
+```
+
+The generic `[data-show-day]` delegate (see above) handles this automatically — no extra wiring needed.
 
 ### Validation Command
 
