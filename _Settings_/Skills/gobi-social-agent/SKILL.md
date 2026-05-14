@@ -33,7 +33,9 @@ metadata:
 ## Inputs
 
 - **My signals** (지난 24h 수정): `Journal/`, `AI/Roundup/`, `AI/Summary/`, `AI/Analysis/`, `AI/Events/`, `AI/Sharable/`, `_Outbox_/BrainUpdates/`
-- **Community signals** (지난 3일): `_Gobi_/BrainUpdates/`, `_Gobi_/Threads/`
+- **Community signals** (지난 3일):
+  - **Live API** (v0.5.0+, default ON): `gobi space feed` per member space — 다른 사용자가 작성한 space posts를 직접 수집. Reply 후보가 여기서 나옴.
+  - **Vault mirror fallback**: `_Gobi_/BrainUpdates/`, `_Gobi_/Threads/` (folders may not exist; mirror is optional).
 - **State**: `_Settings_/Skills/gobi-social-agent/state/_state.json` — 마지막 실행 시각, 이미 사용한 소스 히스토리
 
 ## Outputs
@@ -73,8 +75,29 @@ python3 _Settings_/Skills/gobi-social-agent/scripts/collect_signals.py \
 - `--hours <N>` / `--days <N>`: 수집 윈도우
 - `--limit-my` / `--limit-community`: 결과 개수 제한
 - `--state <path>`: state 파일 경로 (기본: `_Settings_/Skills/gobi-social-agent/state/_state.json`)
+- `--no-api`: gobi API 호출 스킵 (vault mirror만). API 실패시 자동으로 mirror만 사용.
+- `--api-per-space-limit <N>`: 각 space feed에서 가져올 최대 포스트 수 (기본 30)
 
-**선택: 커뮤니티 컨텍스트 보강** (gobi-cli v2.0.16+) — `gobi space list-topics` / `gobi space list-topic-posts <slug>`로 토픽별 최근 포스트를 가져와 community_signals에 더할 수 있다. 현재 구현은 vault-mirror(`_Gobi_/`)만 보지만, topic feed가 더 빠른 신호일 수 있음.
+**community_signals 항목 구조** (live API 경유):
+```json
+{
+  "kind": "space_post",
+  "post_id": "145237",
+  "space_slug": "cmds",
+  "space_name": "CMDSPACE",
+  "author": "Minsuk Kang",
+  "author_vault": "brave-path-zr962w",
+  "title": "[CMDS 실천] Inbox의 부채감을 덜어내는 법",
+  "preview": "...본문 첫 400자...",
+  "created": "2026-05-13T23:47:00Z",
+  "reply_count": 0,
+  "share_url": "https://gobispace.com/spaces/cmds?postId=145237"
+}
+```
+
+**Dedup**: state.json의 `replied_to_posts` (post ID 리스트)에 이미 회신한 포스트는 자동 제외. Reply 드래프트 발행 후 [[#step-5---push-gobi-draft--update-state|Step 5]]에서 `update_state.py --replied-to <post_id>`로 기록.
+
+**선택: 커뮤니티 컨텍스트 추가 보강** (gobi-cli v2.0.16+) — `gobi space list-topics` / `gobi space list-topic-posts <slug>`로 토픽별 최근 포스트를 가져와 community_signals에 더할 수 있다 (현재 미구현, 후속 enhancement 후보).
 
 ### Step 2 — Decide: draft or skip
 
@@ -163,13 +186,21 @@ draft_id=$(gobi --json draft add "GSA: <title>" - \
 그다음 vault-side state 업데이트:
 
 ```bash
+# BU / Thread / Skip
 python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
   --kind bu \
   --source "AI/Analysis/YYYY-MM-DD ... - Agent.md" \
   --draft "_Gobi_/GSA/YYYY-MM-DD ... - BU.md"
+
+# Reply — `--replied-to <post_id>` 필수 (다음 run에서 같은 포스트 재후보 방지)
+python3 _Settings_/Skills/gobi-social-agent/scripts/update_state.py \
+  --kind reply \
+  --source "AI/Roundup/YYYY-MM-DD ... - Claude Code.md" \
+  --draft "_Gobi_/GSA/YYYY-MM-DD ... - Reply-145237.md" \
+  --replied-to 145237
 ```
 
-`--kind` 값: `bu` | `thread` | `skip`
+`--kind` 값: `bu` | `thread` | `reply` | `skip`
 
 ### Step 6 — Open draft (optional)
 

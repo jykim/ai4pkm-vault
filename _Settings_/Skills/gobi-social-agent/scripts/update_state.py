@@ -66,6 +66,9 @@ def main() -> int:
     parser.add_argument("--log", type=Path, default=None,
                         help="log file path (default: <cwd>/_Settings_/Skills/gobi-social-agent/state/_log.md)")
     parser.add_argument("--note", default="", help="optional note (e.g. skip reason)")
+    parser.add_argument("--replied-to", action="append", default=[],
+                        help="Gobi space-post ID just replied to (repeatable; "
+                             "for reply-kind drafts — dedups future runs)")
     args = parser.parse_args()
 
     state_path: Path = args.state or (Path.cwd() / "_Settings_/Skills/gobi-social-agent/state/_state.json")
@@ -87,6 +90,12 @@ def main() -> int:
 
     used = list(dict.fromkeys((state.get("used_sources") or []) + args.source))
     state["used_sources"] = used[-MAX_HISTORY:]
+
+    if args.replied_to:
+        replied = list(dict.fromkeys(
+            (state.get("replied_to_posts") or []) + [str(x) for x in args.replied_to]
+        ))
+        state["replied_to_posts"] = replied[-MAX_HISTORY:]
 
     history = state.setdefault("history", [])
     history.append({
