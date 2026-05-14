@@ -1,0 +1,66 @@
+model:
+  version: 1
+  kind: Table
+  columns: []
+pluginVersion: 1.0.0
+views:
+  - type: table
+    name: Pending Review
+    filters:
+      and:
+        - file.inFolder("_Gobi_/GSA")
+        - file.ext == "md"
+        - approve_for_publish == false
+    order:
+      - file.name
+      - file.ctime
+      - post_kind
+      - reply_to_thread
+      - source_file
+      - community_context
+      - approve_for_publish
+      - tags
+    sort:
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 160
+  - type: table
+    name: Approved
+    filters:
+      and:
+        - file.inFolder("_Gobi_/GSA")
+        - file.ext == "md"
+        - approve_for_publish == true
+    order:
+      - file.name
+      - file.ctime
+      - post_kind
+      - approve_for_publish
+      - tags
+    sort:
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 160
+      post_kind: 80
+  - type: table
+    name: All
+    filters:
+      and:
+        - file.inFolder("_Gobi_/GSA")
+        - file.ext == "md"
+    order:
+      - file.name
+      - file.ctime
+      - post_kind
+      - approve_for_publish
+      - reply_to_thread
+      - source_file
+      - tags
+    sort:
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 160
+      post_kind: 80
