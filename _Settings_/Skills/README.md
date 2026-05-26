@@ -16,6 +16,7 @@ Claude Obsidian Skills is a collection of AI agent skills designed to automate p
 |-------|-------------|
 | [ai4pkm-cli](ai4pkm-cli/) | AI4PKM CLI for orchestrator configuration, worker management, and vault updates |
 | [gobi-onboarding](gobi-onboarding/) | Gobi Desktop 3.0 voice-based onboarding guide with 4-step flow |
+| [gobi-social-agent](gobi-social-agent/) | Reactive social agent that scans recent vault activity and community signals, then drafts BU/Thread/Reply posts for Gobi (always human-approved) |
 
 ### Obsidian Skills
 
