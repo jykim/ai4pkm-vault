@@ -260,3 +260,46 @@ Before completing frontmatter:
 - [ ] Wiki links wrapped in quotes
 - [ ] Special characters quoted appropriately
 - [ ] No duplicate properties (created vs date, tags vs tag)
+
+## Optional: cmds-Aligned Properties
+
+Adopted from [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files) `frontmatter-standard.md`. These are **opt-in** — recommended for analysis docs, prompts, and notes likely to be referenced by AI agents in future sessions, but never required for daily content.
+
+### `description` (recommended for analysis docs)
+
+A one-line English summary acting as an **LLM routing signal** — not a human summary. Treat it like a tool description: action-oriented, specific, no fluff.
+
+```yaml
+✅ GOOD:
+description: "Meeting minutes from 2026-04-07 LG AX camp retrospective. Contains CEO feedback summary and next-action items."
+
+❌ BAD:
+description: "회의록입니다"           # non-descriptive, Korean only
+description: "This is a note"        # no signal for relevance
+```
+
+**Why English?** AI agents (Claude, Gemini, GPT) use this field cross-language to decide whether a note is relevant to a future query. A specific English description survives translation drift and tokenization differences. Body text remains free (Korean default per `.gobi/settings.yaml`).
+
+### `aliases` (optional, for notes with multiple names)
+
+```yaml
+aliases:
+  - "Old Name"
+  - "Korean Title"
+```
+
+### Date imports from cmds (`date created` / `date modified`)
+
+cmds uses split date keys; ai4pkm uses single `created`. When importing cmds content:
+
+| cmds key | ai4pkm key |
+|----------|------------|
+| `date created` | `created` (preserve as-is) |
+| `date modified` | `updated` (new key — only add if non-trivial drift) |
+
+**Do not** introduce camelCase keys (`myRate`, `totalPage`) — keep ai4pkm lowercase. cmds-style camelCase fields can stay quoted as imports but should not propagate into native ai4pkm content.
+
+### Quality additions
+
+- [ ] If document is analysis/prompt/reference: consider adding `description` (English, ≤140 chars, action-oriented)
+- [ ] If imported from cmds: convert `date created` → `created`, drop camelCase compound fields unless meaningful

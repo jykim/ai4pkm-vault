@@ -1,0 +1,4 @@
+interface:
+  display_name: "Meeting Dictation"
+  short_description: "Silent live meeting dictation and wrap-up"
+  default_prompt: "Use $meeting-dictation to capture this meeting silently and summarize only when I say to stop."

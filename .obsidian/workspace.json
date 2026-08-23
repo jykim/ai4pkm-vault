@@ -4,24 +4,59 @@
     "type": "split",
     "children": [
       {
-        "id": "2abdb97c17ed16fa",
+        "id": "38c98fe6a1a0e60c",
         "type": "tabs",
         "children": [
           {
-            "id": "c97b567b0036ecec",
+            "id": "aa3eb0599fddfe23",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "_Settings_/Skills/gobi-migration/Vault Evolution & Migration.canvas",
+                "viewState": {
+                  "x": 173.31259661088276,
+                  "y": 272.8554715429706,
+                  "zoom": -0.6393787572983048
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Vault Evolution & Migration"
+            }
+          },
+          {
+            "id": "79bc3eb8bffce174",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "_Settings_/Skills/gobi-onboarding/Gobi Onboarding Flow.canvas",
+                "viewState": {
+                  "x": 325.38960110387967,
+                  "y": 109.78075852188073,
+                  "zoom": -0.5985319273215617
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Gobi Onboarding Flow"
+            }
+          },
+          {
+            "id": "c37b1d4d08613545",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "VAULTS.md",
+                "file": "AI/Summary/2026-05-21 Discussion Workspace - Gobi PKM & Meeting Assistant by Claude.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "VAULTS"
+              "title": "2026-05-21 Discussion Workspace - Gobi PKM & Meeting Assistant by Claude"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -78,7 +113,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 231.50390243530273
   },
   "right": {
     "id": "fe907adbb28c8e84",
@@ -94,8 +129,8 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "VAULTS.md",
-                "collapseAll": false,
+                "file": "_Settings_/Skills/ai4pkm-helper/SKILL.md",
+                "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
@@ -104,7 +139,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for VAULTS"
+              "title": "Backlinks for SKILL"
             }
           },
           {
@@ -142,13 +177,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "VAULTS.md",
+                "file": "_Settings_/Skills/gobi-migration/Vault Evolution & Migration.canvas",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of VAULTS"
+              "title": "Outline of Vault Evolution & Migration"
             }
           },
           {
@@ -161,11 +196,12 @@
               "title": "Calendar"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 367.5,
     "collapsed": true
   },
   "left-ribbon": {
@@ -181,14 +217,58 @@
       "bases:Create new base": false,
       "obsidian-excalidraw-plugin:New drawing": false,
       "obsidian-importer:Open Importer": false,
-      "obsidian-git:Open Git source control": false,
       "janitor:Janitor: scan vault": false,
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "c97b567b0036ecec",
+  "active": "c37b1d4d08613545",
   "lastOpenFiles": [
-    "_Settings_/Prompts/Passive Brainstorm Canvas (PBC).md",
-    "VAULTS.md"
+    "Journal/2026-05-21.md",
+    "Journal/2026-05-10.md",
+    "_Settings_/Skills/gobi-onboarding/Gobi Onboarding Flow.canvas",
+    "Journal/2026-05-06.md",
+    "_Settings_/Skills/gobi-migration/Vault Evolution & Migration.canvas",
+    "Journal/2026-04-30.md",
+    "Journal/2026-04-26.md",
+    "_Settings_/Logs/ai4pkm_2026-04-26.log",
+    "Topics/TIU - Claude.md",
+    "_Settings_/Logs/2026-04-26-043050-TIU.md",
+    "Topics/이백.md",
+    "_Settings_/Tasks/2026-04-26 TIU - scheduled-0430.md",
+    "_Settings_/Logs/2026-04-26-043050-TIU.log",
+    "Journal/2026-04-25.md",
+    "_Settings_/History/Capture",
+    "_Settings_/Skills/gobi-social-agent/scripts/update_state.py",
+    "_Settings_/Skills/gobi-social-agent/scripts/collect_signals.py",
+    "_Settings_/Skills/gobi-social-agent/scripts",
+    "_Settings_/Skills/gobi-social-agent/SKILL.md",
+    "_Settings_/Skills/gobi-social-agent",
+    "_Settings_/Bases/GSA Drafts.base",
+    "_Settings_/Guidelines/cmds-system-files/wikilink-rules.md",
+    "_Settings_/Guidelines/cmds-system-files/video-project-workflow.md",
+    "_Settings_/Guidelines/cmds-system-files/mermaid-rules.md",
+    "_Settings_/Guidelines/cmds-system-files/indentation-rules.md",
+    "_Settings_/Guidelines/cmds-system-files/frontmatter-standard.md",
+    "_Settings_/Guidelines/cmds-system-files/file-creation-rules.md",
+    "_Settings_/Guidelines/cmds-system-files/directory-structure.md",
+    "_Settings_/Guidelines/cmds-system-files/README.md",
+    "_Settings_/Guidelines/cmds-system-files",
+    "BRAIN.jpg.bak",
+    "Topics/한시.md",
+    "Ingest/Clippings/2026-04-24 한시(漢詩) - 위키백과.md",
+    "Ingest/Clippings/2026-04-24 Building a Second Brain - Tiago Forte.md",
+    "BRAIN.md",
+    "Topics/PKM.md",
+    "_Settings_/History/2026-04-24-9bd26b83-ceaa-48ae-a2ed-598092d2b763.md",
+    "_Settings_/History/2026-04-24-4d20e5fe-0117-432b-825f-3b2706f8d18b.md",
+    "BRAIN.jpg",
+    "_Settings_/History/Capture/2026-03-17-05-55-52-PM-Untitled.canvas",
+    "_Settings_/History/Capture/2026-03-17-06-43-47-PM-Untitled.canvas",
+    "_Settings_/History/Capture/2026-03-17-06-43-47-PM-WBC.canvas",
+    "_Settings_/History/Capture/2026-03-17-05-35-20-PM-Untitled.canvas",
+    "_Settings_/History/Capture/2026-03-17-05-33-10-PM-Untitled.canvas",
+    "_Settings_/History/Capture/2026-03-15-08-54-20-AM-Untitled.canvas",
+    "_Gobi_/Captures/2026-03-15-08-45-53-AM-Untitled.canvas",
+    "_UserTest_/2026-03-03 CMDSxGOBI 온보딩 시나리오 v3.canvas"
   ]
 }

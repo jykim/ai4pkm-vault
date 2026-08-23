@@ -1,7 +1,12 @@
-orchestratorEnabled: true
+vaultSlug: ai4pkm-vault-0424
+selectedSpaceSlug: the-better-community
+orchestratorEnabled: false
 voiceSettings:
   primaryLanguage: ko
   secondaryLanguage: en
   micGain: 0.2
   systemPromptFile: _Settings_/Prompts/Real-time Voice Assistant (RVA).md
-  llmProvider: gobi
+  llmProvider: claude-cli
+  llmConfig:
+    cli:
+      claudePath: /Users/lifidea/.local/bin/claude

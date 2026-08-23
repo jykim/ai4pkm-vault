@@ -180,3 +180,41 @@ Before completing structure validation:
 - [ ] Summary/overview section present
 - [ ] Sections in logical order
 - [ ] Template structure followed for content type
+
+## Optional: 4-Stage Pipeline as Document Lifecycle
+
+Adopted from [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files). Treat the four cmds stages as a **mental model for where a document is in its life**, not as runtime commands. ai4pkm has no slash commands for these (yet) — they map onto existing prompts.
+
+### The four stages
+
+| Stage | Intent | Maps to ai4pkm prompts |
+|-------|--------|------------------------|
+| **Connect** | Capture a fragment, fleeting note, raw transcript | `EIC` (Enrich Ingested Content), `PPC` (Post-Process Capture), `DDO` (Daily Downloads Organizer) |
+| **Merge** | Synthesize multiple fragments into structured literature | `GDR` (Generate Daily Roundup), `GWR` (Generate Weekly Roundup) |
+| **Develop** | Refine into permanent, atomic, reusable knowledge | `TIU` (Topic Index Update), `ARP` (Ad-hoc Research within PKM) |
+| **Share** | Publish externally (Brain Update, social, deck, video) | `PBU` (Post Brain Update), `CTP` (Create Thread Postings), `PWV` (Post Weekly Video) |
+
+Single doc may sit in one stage for weeks before moving on, or never leave Connect — that's fine.
+
+### Optional `stage:` frontmatter key
+
+For docs whose lifecycle position is non-obvious or intentionally tracked:
+
+```yaml
+---
+title: 2026-04-25 LLM Eval Notes
+created: 2026-04-25 14:30:00
+stage: develop          # connect | merge | develop | share
+tags:
+  - llm
+  - evaluation
+---
+```
+
+**When to use**: research drafts that will eventually publish, multi-week project notes, anything where "is this ready to share?" is a real question. Skip for daily content (Journal, Roundup, Clippings) — their stage is implicit from folder.
+
+### Lifecycle as guidance, not enforcement
+
+- Don't refuse to create a doc because its stage is unclear — capture first, label later.
+- Don't auto-promote across stages; user-driven only.
+- The skill's existing structure rules (heading hierarchy, summary-first) still apply at every stage.

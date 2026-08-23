@@ -13,7 +13,7 @@ tags:
 
 Read-only mirror of the 7 shared rule files from [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files) by John Koo. Kept here so AI agents working in `ai4pkm-vault` can recognize and respect CMDS conventions when reading content authored against that framework.
 
-**These rules are NOT authoritative for this vault.** The authoritative rules live in `/AGENTS.md` and `/CLAUDE.md` at the vault root. See `_Settings_/Guidelines/CMDS-COMPAT.md` for the gap analysis and translation cheat-sheet.
+**These rules are NOT authoritative for this vault.** The authoritative rules live in `/AGENTS.md` and `/CLAUDE.md` at the vault root. See `_Settings_/Guidelines/CMDS-PRINCIPLES.md` for the absorbed-principles cheat-sheet (which cmds ideas ai4pkm has adopted, and where they live in the skill rules).
 
 ## Contents
 
