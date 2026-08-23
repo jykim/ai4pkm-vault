@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김삿갓의 두 번째 뇌 · 방랑록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<style>
+:root {
+    --bg: #f4ead5;
+    --bg-paper: #ede1c4;
+    --bg-darker: #e0d2ae;
+    --fg: #1f160d;
+    --fg-ink: #2a1d10;
+    --fg-soft: #5a4530;
+    --fg-mute: #8b7555;
+    --accent: #8b1a1a;
+    --accent-dim: #6d1414;
+    --accent-light: #b23838;
+    --gold: #a87a1f;
+    --seal: #a82828;
+    --border-ink: #3a2818;
+    --border-soft: #b8a07a;
+    --card: #f9f1dc;
+    --card-hover: #fff6e0;
+    --border: 1.5px;
+    --transition: 0.18s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.09  0 0 0 0 0.05  0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(168,122,31,0.08), transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(139,26,26,0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== HERO ===== */
+.hero {
+    border: var(--border) solid var(--border-ink);
+    background: var(--card);
+    padding: 40px;
+    margin-bottom: 40px;
+    position: relative;
+    box-shadow: 6px 6px 0 var(--border-ink);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px solid var(--border-soft);
+    pointer-events: none;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--fg-mute);
+    text-transform: uppercase;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.hero-meta::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-soft);
+}
+
+.profile-row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 96px;
+    height: 96px;
+    border: var(--border) solid var(--border-ink);
+    overflow: hidden;
+    background: var(--bg-paper);
+    flex-shrink: 0;
+    object-fit: cover;
+    box-shadow: 3px 3px 0 var(--border-ink);
+}
+
+.title-block h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 42px;
+    line-height: 1.15;
+    color: var(--fg-ink);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.title-block .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.description {
+    font-size: 16px;
+    color: var(--fg-soft);
+    line-height: 1.8;
+    font-weight: 400;
+    border-left: 3px solid var(--accent);
+    padding: 4px 16px;
+    background: rgba(168,122,31,0.05);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    background: var(--fg-ink);
+    color: var(--bg);
+    border: var(--border) solid var(--border-ink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translate(-2px, -2px);
+    box-shadow: 3px 3px 0 var(--border-ink);
+}
+
+.btn.outline {
+    background: transparent;
+    color: var(--fg-ink);
+}
+
+.btn.outline:hover {
+    background: var(--fg-ink);
+    color: var(--bg);
+}
+
+.btn.seal {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent-dim);
+}
+
+.btn.seal:hover {
+    background: var(--accent-dim);
+}
+
+/* K-Graph */
+.kgraph-container {
+    background: var(--bg-paper);
+    border: var(--border) solid var(--border-ink);
+    height: 320px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 3px 3px 0 var(--border-ink);
+}
+
+.kgraph-container::before {
+    content: '지식 그래프 · 知識網';
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--fg-mute);
+    z-index: 3;
+    background: var(--bg-paper);
+    padding: 2px 6px;
+}
+
+.kgraph-container::after {
+    content: '클릭하여 확대 ↗';
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--fg-mute);
+    z-index: 3;
+}
+
+.kgraph-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--fg-mute);
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: var(--border) solid var(--border-ink);
+}
+
+.section-header h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--fg-ink);
+    letter-spacing: -0.3px;
+}
+
+.section-header .hanja {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+
+.section-header .count {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ===== UPDATES ===== */
+.updates-section {
+    margin-bottom: 48px;
+}
+
+.updates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.update-card {
+    background: var(--card);
+    border: var(--border) solid var(--border-ink);
+    padding: 24px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    box-shadow: 3px 3px 0 var(--border-ink);
+}
+
+.update-card:hover {
+    background: var(--card-hover);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--border-ink);
+}
+
+.update-card.expanded {
+    grid-column: 1 / -1;
+    background: var(--card-hover);
+}
+
+.update-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--fg-mute);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.update-date::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.update-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--fg-ink);
+    margin-bottom: 12px;
+    line-height: 1.35;
+}
+
+.update-preview {
+    font-size: 14px;
+    color: var(--fg-soft);
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.update-full {
+    font-size: 15px;
+    color: var(--fg-ink);
+    line-height: 1.85;
+    margin-bottom: 16px;
+}
+
+.update-full h1, .update-full h2, .update-full h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    margin: 20px 0 10px;
+    color: var(--fg-ink);
+}
+
+.update-full h2 { font-size: 22px; }
+.update-full h3 { font-size: 18px; }
+
+.update-full p { margin: 10px 0; }
+
+.update-full ul, .update-full ol {
+    margin: 10px 0 10px 24px;
+}
+
+.update-full li { margin: 4px 0; }
+
+.update-full a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.update-full em { color: #6a4f28; }
+
+.update-full blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 4px 16px;
+    margin: 12px 0;
+    background: rgba(168,122,31,0.06);
+    color: var(--fg-soft);
+    font-style: italic;
+}
+
+.update-full code {
+    background: var(--bg-darker);
+    padding: 2px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9em;
+}
+
+.update-full img {
+    max-width: 100%;
+    border: 1px solid var(--border-ink);
+    margin: 12px 0;
+}
+
+.topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.topic {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    background: var(--bg-darker);
+    color: var(--fg-soft);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--border-soft);
+}
+
+.load-more {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--fg-mute);
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+    border: 1px dashed var(--border-soft);
+}
+
+/* ===== CHAT ===== */
+.chat-section {
+    background: var(--card);
+    border: var(--border) solid var(--border-ink);
+    padding: 32px;
+    margin-bottom: 48px;
+    box-shadow: 3px 3px 0 var(--border-ink);
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    border: 1px solid var(--border-soft);
+    background: var(--bg-paper);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.chat-message {
+    padding: 12px 16px;
+    max-width: 80%;
+    border: 1px solid var(--border-soft);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.chat-message.human {
+    align-self: flex-end;
+    background: var(--fg-ink);
+    color: var(--bg);
+    border-color: var(--fg-ink);
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: var(--card);
+    color: var(--fg-ink);
+}
+
+.chat-message.assistant h1,
+.chat-message.assistant h2,
+.chat-message.assistant h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    margin: 8px 0 4px;
+}
+
+.chat-message.assistant a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.chat-message.assistant code {
+    background: var(--bg-darker);
+    padding: 1px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9em;
+}
+
+.chat-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+}
+
+.chat-prompt-btn {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    padding: 10px 16px;
+    background: transparent;
+    color: var(--fg-soft);
+    border: 1px solid var(--border-soft);
+    cursor: pointer;
+    transition: var(--transition);
+    font-style: italic;
+}
+
+.chat-prompt-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--border-ink);
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--border-soft);
+    background: var(--card);
+}
+
+.chat-input {
+    flex: 1;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border-soft);
+    color: var(--fg-ink);
+    outline: none;
+}
+
+.chat-input:focus {
+    border-color: var(--accent);
+}
+
+.chat-send {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent-dim);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.chat-send:hover:not(:disabled) {
+    background: var(--accent-dim);
+}
+
+.chat-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: var(--border) solid var(--border-ink);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer a {
+    color: var(--accent);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--accent);
+    transition: var(--transition);
+}
+
+.footer a:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+.footer .korean-stamp {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    font-weight: 800;
+    border: 2px solid var(--accent);
+    padding: 4px 10px;
+    display: inline-block;
+    transform: rotate(-3deg);
+}
+
+/* ===== K-GRAPH OVERLAY ===== */
+.kgraph-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30,20,10,0.97);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.kgraph-overlay.active { display: block; }
+
+.kgraph-overlay-title {
+    position: absolute;
+    top: 28px;
+    left: 32px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 22px;
+    color: var(--bg);
+    letter-spacing: 1px;
+    z-index: 1001;
+}
+
+.kgraph-overlay-title .hanja {
+    color: var(--accent-light);
+    font-size: 16px;
+    margin-left: 12px;
+}
+
+.kgraph-overlay-close {
+    position: absolute;
+    top: 28px;
+    right: 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--bg);
+    border: 1px solid var(--bg);
+    cursor: pointer;
+    z-index: 1001;
+    transition: var(--transition);
+}
+
+.kgraph-overlay-close:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+#kgraph-full {
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== K-GRAPH SVG ===== */
+.kgraph-node text {
+    font-family: 'Nanum Myeongjo', serif;
+    fill: var(--fg-ink);
+    pointer-events: none;
+    user-select: none;
+}
+
+.kgraph-overlay .kgraph-node text {
+    fill: var(--bg);
+}
+
+.kgraph-link {
+    stroke: var(--border-soft);
+    stroke-opacity: 0.6;
+}
+
+.kgraph-overlay .kgraph-link {
+    stroke: var(--accent-light);
+    stroke-opacity: 0.4;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .container { padding: 24px 16px; }
+    .hero { padding: 28px 20px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+    .hero-content { order: 2; }
+    .kgraph-container { order: 1; height: 260px; }
+    .title-block h1 { font-size: 32px; }
+    .profile-row { flex-direction: row; }
+    .profile-pic { width: 72px; height: 72px; }
+    .updates-grid { grid-template-columns: 1fr; }
+    .actions .btn { flex: 1; justify-content: center; }
+    .chat-container { height: 400px; }
+    .footer { flex-direction: column; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="kgraph-overlay" id="kgraph-overlay">
+    <div class="kgraph-overlay-title">
+        지식 그래프<span class="hanja">知識網</span>
+    </div>
+    <button class="kgraph-overlay-close" onclick="closeKGraphOverlay()">CLOSE · ESC</button>
+    <svg id="kgraph-full"></svg>
+</div>
+
+<div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <div class="hero-meta">
+                    <span>방랑록 · 放浪錄</span>
+                </div>
+                <div class="profile-row">
+                    <img id="profile-pic" class="profile-pic" alt="Profile">
+                    <div class="title-block">
+                        <h1 id="hero-title">Loading...</h1>
+                        <div class="subtitle">Second Brain · 第二之腦</div>
+                    </div>
+                </div>
+                <p class="description" id="hero-desc">Loading description...</p>
+                <div class="actions">
+                    <a class="btn seal" href="#updates">방랑록 읽기</a>
+                    <a class="btn outline" href="#chat">대화하기</a>
+                </div>
+            </div>
+            <div class="kgraph-container" id="kgraph-container" onclick="openKGraphOverlay()">
+                <svg id="kgraph-mini" width="100%" height="100%"></svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- UPDATES -->
+    <section class="updates-section" id="updates">
+        <div class="section-header">
+            <h2>방랑록</h2>
+            <span class="hanja">放浪錄</span>
+            <span class="count" id="updates-count"></span>
+        </div>
+        <div class="updates-grid" id="updates-grid">
+            <div class="empty-state">길 위의 기록을 불러오는 중이오...</div>
+        </div>
+        <div class="load-more">
+            <button class="btn outline" id="load-more-btn" style="display:none;" onclick="loadMoreUpdates()">더 읽기 ↓</button>
+        </div>
+    </section>
+
+    <!-- CHAT -->
+    <section class="chat-section" id="chat">
+        <div class="section-header">
+            <h2>대화</h2>
+            <span class="hanja">對話</span>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-prompts" id="chat-prompts">
+                    <button class="chat-prompt-btn" onclick="fillPrompt('김삿갓 방랑의 여정을 간추려 들려주오')">김삿갓 방랑의 여정을 간추려 들려주오</button>
+                    <button class="chat-prompt-btn" onclick="fillPrompt('한시 절구와 율시의 차이가 무엇이오?')">한시 절구와 율시의 차이가 무엇이오?</button>
+                    <button class="chat-prompt-btn" onclick="fillPrompt('세컨드 브레인이 방랑자에게 어떤 쓸모인가?')">세컨드 브레인이 방랑자에게 어떤 쓸모인가?</button>
+                </div>
+            </div>
+            <div class="chat-input-area" id="chat-input-area" style="display:none;">
+                <input type="text" class="chat-input" id="chat-input" placeholder="물음을 남기시오..." onkeydown="if(event.key==='Enter') sendChat()">
+                <button class="chat-send" id="chat-send" onclick="sendChat()">보내기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="korean-stamp">金笠</span>
+        <a id="gobi-link" href="#" target="_blank" rel="noopener">POWERED BY GOBI</a>
+    </footer>
+
+</div>
+
+<script>
+// ===== SETUP =====
+const vault = gobi.vault;
+let kgraphData = null;
+let allUpdates = [];
+let updatesNextCursor = null;
+let chatSessionId = null;
+
+// Configure marked
+const renderer = new marked.Renderer();
+const originalLink = renderer.link.bind(renderer);
+renderer.link = function(href, title, text) {
+    const html = originalLink(href, title, text);
+    return html.replace(/^<a /, '<a target="_blank" rel="noopener" ');
+};
+marked.setOptions({ renderer, breaks: true, gfm: true });
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function getFileUrl(path) {
+    const { vaultId, webdriveUrl } = vault;
+    const encoded = path.split('/').map(encodeURIComponent).join('/');
+    return `${webdriveUrl}/api/v1/file/raw/${vaultId}/${encoded}`;
+}
+
+function resolveWikiImages(markdown) {
+    if (!markdown) return '';
+    return markdown.replace(/!\[\[([^\]|]+)(?:\|(\d+))?\]\]/g, (_, path, width) => {
+        const url = getFileUrl(path.trim());
+        return width
+            ? `<img src="${url}" alt="${path.trim()}" width="${width}" style="max-width:100%">`
+            : `<img src="${url}" alt="${path.trim()}" style="max-width:100%">`;
+    });
+}
+
+function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}.${m}.${day}`;
+}
+
+// ===== HERO =====
+function renderHero() {
+    const title = vault.title || '내 두 번째 뇌';
+    const desc = vault.description || '';
+    document.getElementById('hero-title').textContent = title;
+    document.getElementById('hero-desc').textContent = desc;
+    document.title = `${title} · 방랑록`;
+
+    const picEl = document.getElementById('profile-pic');
+    if (vault.thumbnailPath) {
+        picEl.src = `https://d16t3dioqz0xo9.cloudfront.net/${vault.thumbnailPath}@128x128.webp`;
+        picEl.onerror = () => { picEl.style.display = 'none'; };
+    } else {
+        picEl.style.display = 'none';
+    }
+
+    const slug = vault.slug || vault.vaultId || '';
+    document.getElementById('gobi-link').href = `https://www.gobispace.com/@${slug}?og=1`;
+}
+
+// ===== UPDATES =====
+async function loadUpdates(cursor) {
+    try {
+        const res = await gobi.listBrainUpdates({ limit: 8, cursor });
+        return { data: res.data || [], next: res.pagination?.nextCursor || null };
+    } catch (e) {
+        console.error('loadUpdates error', e);
+        return { data: [], next: null };
+    }
+}
+
+async function initUpdates() {
+    const { data, next } = await loadUpdates(null);
+    allUpdates = data;
+    updatesNextCursor = next;
+    renderUpdates();
+    await enrichKGraph();
+    if (next) {
+        document.getElementById('load-more-btn').style.display = 'inline-flex';
+    }
+}
+
+async function loadMoreUpdates() {
+    if (!updatesNextCursor) return;
+    const btn = document.getElementById('load-more-btn');
+    btn.disabled = true;
+    btn.textContent = '불러오는 중...';
+    const { data, next } = await loadUpdates(updatesNextCursor);
+    allUpdates = allUpdates.concat(data);
+    updatesNextCursor = next;
+    renderUpdates();
+    btn.disabled = false;
+    btn.textContent = '더 읽기 ↓';
+    if (!next) btn.style.display = 'none';
+    rebuildKGraph();
+}
+
+function renderUpdates() {
+    const grid = document.getElementById('updates-grid');
+    const countEl = document.getElementById('updates-count');
+    countEl.textContent = allUpdates.length ? `총 ${allUpdates.length}편` : '';
+
+    if (!allUpdates.length) {
+        grid.innerHTML = '<div class="empty-state">아직 방랑록이 없소. 곧 첫 기록이 올라올 것이오.</div>';
+        return;
+    }
+
+    grid.innerHTML = allUpdates.map((u, i) => {
+        const topics = (u.topics || []).map(t => `<span class="topic">${escapeHtml(t.name)}</span>`).join('');
+        const preview = escapeHtml((u.content || '').substring(0, 200));
+        const hasMore = (u.content || '').length > 200;
+        return `
+            <div class="update-card" data-idx="${i}" onclick="toggleUpdateDetail(${i}, event)">
+                <div class="update-date">${formatDate(u.createdAt)}</div>
+                <div class="update-title">${escapeHtml(u.title || '무제')}</div>
+                <div class="update-preview">${preview}${hasMore ? '...' : ''}</div>
+                ${topics ? `<div class="topics">${topics}</div>` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+function toggleUpdateDetail(idx, event) {
+    if (event && event.target.closest('a')) return;
+    const card = document.querySelector(`.update-card[data-idx="${idx}"]`);
+    if (!card) return;
+    const update = allUpdates[idx];
+    const expanded = card.classList.contains('expanded');
+
+    if (expanded) {
+        const topics = (update.topics || []).map(t => `<span class="topic">${escapeHtml(t.name)}</span>`).join('');
+        const preview = escapeHtml((update.content || '').substring(0, 200));
+        const hasMore = (update.content || '').length > 200;
+        card.classList.remove('expanded');
+        card.innerHTML = `
+            <div class="update-date">${formatDate(update.createdAt)}</div>
+            <div class="update-title">${escapeHtml(update.title || '무제')}</div>
+            <div class="update-preview">${preview}${hasMore ? '...' : ''}</div>
+            ${topics ? `<div class="topics">${topics}</div>` : ''}
+        `;
+    } else {
+        const topics = (update.topics || []).map(t => `<span class="topic">${escapeHtml(t.name)}</span>`).join('');
+        card.classList.add('expanded');
+        card.innerHTML = `
+            <div class="update-date">${formatDate(update.createdAt)}</div>
+            <div class="update-title">${escapeHtml(update.title || '무제')}</div>
+            <div class="update-full">${marked.parse(resolveWikiImages(update.content || ''))}</div>
+            ${topics ? `<div class="topics">${topics}</div>` : ''}
+        `;
+    }
+}
+
+// ===== KNOWLEDGE GRAPH =====
+function buildGraphData(updates) {
+    const topicCount = {};
+    const coOccur = {};
+    for (const u of updates) {
+        const topics = (u.topics || []).map(t => t.name).filter(Boolean);
+        for (const t of topics) topicCount[t] = (topicCount[t] || 0) + 1;
+        for (let i = 0; i < topics.length; i++) {
+            for (let j = i+1; j < topics.length; j++) {
+                const [a, b] = [topics[i], topics[j]].sort();
+                const key = a + '||' + b;
+                coOccur[key] = (coOccur[key] || 0) + 1;
+            }
+        }
+    }
+
+    // top N
+    const topN = Object.entries(topicCount).sort((a,b) => b[1]-a[1]).slice(0, 20);
+    const keepSet = new Set(topN.map(e => e[0]));
+    const nodesWithEdges = new Set();
+
+    const links = [];
+    for (const [key, count] of Object.entries(coOccur)) {
+        const [a, b] = key.split('||');
+        if (keepSet.has(a) && keepSet.has(b)) {
+            links.push({ source: a, target: b, value: count });
+            nodesWithEdges.add(a);
+            nodesWithEdges.add(b);
+        }
+    }
+
+    const nodes = topN
+        .filter(([name]) => nodesWithEdges.has(name))
+        .map(([name, count]) => ({ id: name, count }));
+
+    return { nodes, links, maxCount: nodes.length ? Math.max(...nodes.map(n => n.count)) : 1 };
+}
+
+function drawGraph(containerId, w, h, data, opts) {
+    const svg = d3.select('#' + containerId);
+    svg.selectAll('*').remove();
+    if (!data.nodes.length) {
+        if (containerId === 'kgraph-mini') {
+            const cont = document.getElementById('kgraph-container');
+            if (!cont.querySelector('.kgraph-empty')) {
+                const empty = document.createElement('div');
+                empty.className = 'kgraph-empty';
+                empty.textContent = '아직 엮인 주제가 적소. 방랑이 쌓이면 그림이 맺히리다.';
+                cont.appendChild(empty);
+            }
+        }
+        return;
+    }
+
+    const { nodeRange, fontSize, distance, charge } = opts;
+    const sizeScale = d3.scaleSqrt().domain([1, data.maxCount]).range(nodeRange);
+
+    // Copy data for independent simulation
+    const nodes = data.nodes.map(n => ({ ...n }));
+    const links = data.links.map(l => ({ ...l }));
+
+    const sim = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(distance))
+        .force('charge', d3.forceManyBody().strength(charge))
+        .force('center', d3.forceCenter(w/2, h/2))
+        .force('collide', d3.forceCollide().radius(d => sizeScale(d.count) + 8));
+
+    const link = svg.append('g')
+        .selectAll('line')
+        .data(links)
+        .enter()
+        .append('line')
+        .attr('class', 'kgraph-link')
+        .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value)));
+
+    const node = svg.append('g')
+        .selectAll('g')
+        .data(nodes)
+        .enter()
+        .append('g')
+        .attr('class', 'kgraph-node')
+        .call(d3.drag()
+            .on('start', (event, d) => {
+                if (!event.active) sim.alphaTarget(0.3).restart();
+                d.fx = d.x; d.fy = d.y;
+            })
+            .on('drag', (event, d) => {
+                d.fx = event.x; d.fy = event.y;
+            })
+            .on('end', (event, d) => {
+                if (!event.active) sim.alphaTarget(0);
+                d.fx = null; d.fy = null;
+            }));
+
+    node.append('circle')
+        .attr('r', d => sizeScale(d.count))
+        .attr('fill', d => {
+            const op = 0.3 + (d.count / data.maxCount) * 0.7;
+            return `rgba(139,26,26,${op})`;
+        })
+        .attr('stroke', '#3a2818')
+        .attr('stroke-width', 1);
+
+    node.append('text')
+        .text(d => d.id)
+        .attr('font-size', fontSize)
+        .attr('dy', d => sizeScale(d.count) + 12)
+        .attr('text-anchor', 'middle');
+
+    sim.on('tick', () => {
+        link
+            .attr('x1', d => Math.max(20, Math.min(w-20, d.source.x)))
+            .attr('y1', d => Math.max(20, Math.min(h-20, d.source.y)))
+            .attr('x2', d => Math.max(20, Math.min(w-20, d.target.x)))
+            .attr('y2', d => Math.max(20, Math.min(h-20, d.target.y)));
+        node.attr('transform', d => `translate(${Math.max(20, Math.min(w-20, d.x))}, ${Math.max(20, Math.min(h-20, d.y))})`);
+    });
+}
+
+async function enrichKGraph() {
+    // pull up to 32 BUs for richer graph
+    let combined = [...allUpdates];
+    let cursor = updatesNextCursor;
+    for (let i = 0; i < 3 && cursor; i++) {
+        const res = await gobi.listBrainUpdates({ limit: 8, cursor });
+        combined = combined.concat(res.data || []);
+        cursor = res.pagination?.nextCursor || null;
+    }
+    kgraphData = buildGraphData(combined);
+    const cont = document.getElementById('kgraph-container');
+    drawGraph('kgraph-mini', cont.clientWidth, cont.clientHeight, kgraphData, {
+        nodeRange: [4, 16], fontSize: '9px', distance: 60, charge: -80
+    });
+}
+
+function rebuildKGraph() {
+    kgraphData = buildGraphData(allUpdates);
+    const cont = document.getElementById('kgraph-container');
+    drawGraph('kgraph-mini', cont.clientWidth, cont.clientHeight, kgraphData, {
+        nodeRange: [4, 16], fontSize: '9px', distance: 60, charge: -80
+    });
+}
+
+function openKGraphOverlay() {
+    if (!kgraphData || !kgraphData.nodes.length) return;
+    document.getElementById('kgraph-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    drawGraph('kgraph-full', window.innerWidth, window.innerHeight, kgraphData, {
+        nodeRange: [8, 32], fontSize: '12px', distance: 120, charge: -200
+    });
+}
+
+function closeKGraphOverlay() {
+    document.getElementById('kgraph-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeKGraphOverlay();
+});
+
+// ===== CHAT =====
+async function initChat() {
+    try {
+        const res = await gobi.getSessions({ limit: 1 });
+        if (res.data && res.data.length) {
+            chatSessionId = res.data[0].sessionId;
+            const msgRes = await gobi.loadMessages(chatSessionId, { limit: 50 });
+            const msgs = msgRes.messages || [];
+            if (msgs.length) {
+                showChatUI();
+                renderChatMessages(msgs);
+            }
+        }
+    } catch (e) {
+        console.error('initChat error', e);
+    }
+}
+
+function showChatUI() {
+    document.getElementById('chat-prompts').style.display = 'none';
+    document.getElementById('chat-input-area').style.display = 'flex';
+}
+
+function renderChatMessages(msgs) {
+    const container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+    for (const m of msgs) {
+        appendMessage(m.role, m.content);
+    }
+    container.scrollTop = container.scrollHeight;
+}
+
+function appendMessage(role, content) {
+    const container = document.getElementById('chat-messages');
+    const el = document.createElement('div');
+    el.className = `chat-message ${role}`;
+    if (role === 'assistant') {
+        el.innerHTML = marked.parse(content || '');
+    } else {
+        el.textContent = content;
+    }
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+    return el;
+}
+
+function fillPrompt(text) {
+    showChatUI();
+    const input = document.getElementById('chat-input');
+    input.value = text;
+    input.focus();
+}
+
+async function sendChat() {
+    const input = document.getElementById('chat-input');
+    const btn = document.getElementById('chat-send');
+    const text = input.value.trim();
+    if (!text) return;
+
+    showChatUI();
+    appendMessage('human', text);
+    input.value = '';
+    btn.disabled = true;
+
+    if (!chatSessionId) chatSessionId = crypto.randomUUID();
+
+    const loadingEl = appendMessage('assistant', '...');
+    let response = '';
+
+    try {
+        await gobi.sendMessage(chatSessionId, text, (delta) => {
+            response += delta;
+            loadingEl.innerHTML = marked.parse(response);
+            const container = document.getElementById('chat-messages');
+            container.scrollTop = container.scrollHeight;
+        });
+    } catch (e) {
+        console.error('sendChat error', e);
+        loadingEl.innerHTML = marked.parse('답을 전하지 못하였소. 다시 청해보시오.');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+// ===== INIT =====
+(async function init() {
+    renderHero();
+    await initUpdates();
+    await initChat();
+
+    window.addEventListener('resize', () => {
+        if (!kgraphData) return;
+        const cont = document.getElementById('kgraph-container');
+        drawGraph('kgraph-mini', cont.clientWidth, cont.clientHeight, kgraphData, {
+            nodeRange: [4, 16], fontSize: '9px', distance: 60, charge: -80
+        });
+    });
+})();
+</script>
+
+</body>
+</html>

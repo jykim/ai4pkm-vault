@@ -1,0 +1,221 @@
+{
+  "nodes": [
+    {
+      "id": "grp_root",
+      "type": "text",
+      "text": "📋 Discussion Workspace",
+      "x": -106,
+      "y": 0,
+      "width": 212,
+      "height": 90
+    },
+    {
+      "id": "grp_sidenote",
+      "type": "text",
+      "text": "**📌 System Setup**\n\n### Active UI development\nAcknowledge active engineering and design efforts to improve visual mapping quality.\n\n### Visual nodes shape\nUser observed the default visual shape representation (circular/node-based) of the interface.",
+      "x": -402,
+      "y": -229,
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_meeting_context",
+      "type": "text",
+      "text": "**📋 Human Conversation Mapping**\n\n### Human-to-human focus\nTransitioned to mapping real-time human discussions rather than AI-direct interactions.",
+      "x": -323,
+      "y": 170,
+      "width": 212,
+      "height": 201
+    },
+    {
+      "id": "grp_realtime_value",
+      "type": "text",
+      "text": "**⚡ Real-time Synthesis**\n\n### Value of immediacy\nAcknowledge the immediate value of real-time AI summarization during active discussion.",
+      "x": -878,
+      "y": 704,
+      "width": 212,
+      "height": 201
+    },
+    {
+      "id": "grp_roles",
+      "type": "text",
+      "text": "**📌 Team Roles**\n\n### Core technical ownership\nAcknowledged Minsung as the primary technical anchor who commands overall product knowledge.\n\n### Discord active presence\nNoted Minsung's highly active and responsive presence on Discord for communication.",
+      "x": 16,
+      "y": -229,
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_market_position",
+      "type": "text",
+      "text": "**📋 Market & Cost Value**\n\n### Disruptive pricing model\nDiscussion shifted to the high utility of offering a comprehensive AI service for free.",
+      "x": 572,
+      "y": 170,
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_competitor_landscape",
+      "type": "text",
+      "text": "**🔍 Alternative Tools**\n\n### Alternative exploration\nNoted mentions of custom API integration and alternative agents (e.g., Gobi Agent).",
+      "x": -401,
+      "y": 704,
+      "width": 212,
+      "height": 197
+    },
+    {
+      "id": "grp_use_cases",
+      "type": "text",
+      "text": "**⚡ AI Use Cases**\n\n### Automated website building\nExplored specific capabilities of agent alternatives, such as automated homepage creation.",
+      "x": -11,
+      "y": 1439,
+      "width": 212,
+      "height": 197
+    },
+    {
+      "id": "grp_pkm_sharing",
+      "type": "text",
+      "text": "**💡 PKM & Sharing Motivation**\n\n### Need to share personal knowledge\nStrong alignment on the user desire to easily share curated PKM spaces with others.\n\n### Active repository usage\nSpeaker noted their own active history of uploading recent work directly onto the platform.",
+      "x": 518,
+      "y": 704,
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_gobi_ecosystem",
+      "type": "text",
+      "text": "**🔍 Gobi Platform**\n\n### Gobi personal site dependency\nHighlighted constant reliance on Gobi as the central repository for personal web content.\n\n### Git-based workflow constraint\nNoted tension where users primarily view or manage assets directly through Git.",
+      "x": 953,
+      "y": 704,
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_language_localization",
+      "type": "text",
+      "text": "**📌 Language Preferences**\n\n### Language localization tension\nUser raised a question about the map layout generating primary summaries in English.",
+      "x": 434,
+      "y": -253,
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_meeting_navigation",
+      "type": "text",
+      "text": "**⚡ Active Meeting Navigation**\n\n### In-meeting historical reference\nValue of reviewing one's own spoken contributions and flow in real-time during a meeting.",
+      "x": -639,
+      "y": 704,
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_predictive_guidance",
+      "type": "text",
+      "text": "**💡 Predictive Conversation Guidance**\n\n### Predictive agenda prompts\nIntended feature to predict and suggest optimal next discussion points based on the active agenda.",
+      "x": -158,
+      "y": 704,
+      "width": 212,
+      "height": 239
+    },
+    {
+      "id": "grp_product_identity",
+      "type": "text",
+      "text": "**📋 Product Identity Evolution**\n\n### Meeting assistant development\nActive engineering and design effort dedicated to realizing the interactive meeting assistant vision.",
+      "x": 294,
+      "y": 170,
+      "width": 212,
+      "height": 239
+    },
+    {
+      "id": "grp_product_differentiation",
+      "type": "text",
+      "text": "**⚖️ Product Comparison**\n\n### Minimix differentiation\nA key question was raised comparing the current system with Jinyoung's 'Minimix' product.\n\n### Domain focus vs General utility\nThis platform optimizes specifically for meetings, whereas other tools target general data workflows.\n\n### Activation barrier tension\nTension identified: If users already have general-purpose tools always active, there is friction in launching a separate meeting-only tool.\n\n### Voice interaction paradigm\nUsing voice as the primary native input medium lowers friction and defines the core differentiation.\n\n### Functional convergence\nAcknowledged that core underlying AI capabilities and features tend to overlap and converge across products.",
+      "x": 88,
+      "y": 704,
+      "width": 402,
+      "height": 569
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-grp_root-grp_meeting_context",
+      "fromNode": "grp_root",
+      "fromSide": "bottom",
+      "toNode": "grp_meeting_context",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_meeting_context-grp_realtime_value",
+      "fromNode": "grp_meeting_context",
+      "fromSide": "bottom",
+      "toNode": "grp_realtime_value",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_meeting_context-grp_market_position",
+      "fromNode": "grp_meeting_context",
+      "fromSide": "bottom",
+      "toNode": "grp_market_position",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_market_position-grp_competitor_landscape",
+      "fromNode": "grp_market_position",
+      "fromSide": "bottom",
+      "toNode": "grp_competitor_landscape",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_competitor_landscape-grp_use_cases",
+      "fromNode": "grp_competitor_landscape",
+      "fromSide": "bottom",
+      "toNode": "grp_use_cases",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_competitor_landscape-grp_pkm_sharing",
+      "fromNode": "grp_competitor_landscape",
+      "fromSide": "bottom",
+      "toNode": "grp_pkm_sharing",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_pkm_sharing-grp_gobi_ecosystem",
+      "fromNode": "grp_pkm_sharing",
+      "fromSide": "bottom",
+      "toNode": "grp_gobi_ecosystem",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_meeting_context-grp_meeting_navigation",
+      "fromNode": "grp_meeting_context",
+      "fromSide": "bottom",
+      "toNode": "grp_meeting_navigation",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_meeting_navigation-grp_predictive_guidance",
+      "fromNode": "grp_meeting_navigation",
+      "fromSide": "bottom",
+      "toNode": "grp_predictive_guidance",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_root-grp_product_identity",
+      "fromNode": "grp_root",
+      "fromSide": "bottom",
+      "toNode": "grp_product_identity",
+      "toSide": "top"
+    },
+    {
+      "id": "e-grp_product_identity-grp_product_differentiation",
+      "fromNode": "grp_product_identity",
+      "fromSide": "bottom",
+      "toNode": "grp_product_differentiation",
+      "toSide": "top"
+    }
+  ],
+  "metadata": {
+    "version": "1.0-1.0"
+  }
+}

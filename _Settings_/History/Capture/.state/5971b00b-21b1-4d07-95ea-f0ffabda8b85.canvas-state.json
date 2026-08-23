@@ -1,0 +1,341 @@
+{
+  "version": 2,
+  "nodes": [
+    {
+      "id": "grp_root",
+      "label": "📋 Discussion Workspace",
+      "nodeType": "group",
+      "posts": "[]",
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 0,
+        "y": 45
+      },
+      "width": 212,
+      "height": 90
+    },
+    {
+      "id": "grp_sidenote",
+      "label": "📌 System Setup",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_visual_setup\",\"title\":\"Active UI development\",\"content\":\"Acknowledge active engineering and design efforts to improve visual mapping quality.\"},{\"id\":\"post_shape_feedback\",\"title\":\"Visual nodes shape\",\"content\":\"User observed the default visual shape representation (circular/node-based) of the interface.\"}]",
+      "level": 1,
+      "sidebar": true,
+      "color": "",
+      "position": {
+        "x": -200.86885260794526,
+        "y": -130.5
+      },
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_meeting_context",
+      "label": "📋 Human Conversation Mapping",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_human_dialogue\",\"title\":\"Human-to-human focus\",\"content\":\"Transitioned to mapping real-time human discussions rather than AI-direct interactions.\"}]",
+      "level": 1,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": -217,
+        "y": 270.5
+      },
+      "width": 212,
+      "height": 201
+    },
+    {
+      "id": "grp_realtime_value",
+      "label": "⚡ Real-time Synthesis",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_realtime_feedback\",\"title\":\"Value of immediacy\",\"content\":\"Acknowledge the immediate value of real-time AI summarization during active discussion.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": -772.1397802867834,
+        "y": 804.5
+      },
+      "width": 212,
+      "height": 201
+    },
+    {
+      "id": "grp_roles",
+      "label": "📌 Team Roles",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_team_roles\",\"title\":\"Core technical ownership\",\"content\":\"Acknowledged Minsung as the primary technical anchor who commands overall product knowledge.\"},{\"id\":\"post_discord_presence\",\"title\":\"Discord active presence\",\"content\":\"Noted Minsung's highly active and responsive presence on Discord for communication.\"}]",
+      "level": 1,
+      "sidebar": true,
+      "color": "",
+      "position": {
+        "x": 217.13114739205474,
+        "y": -130.5
+      },
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_market_position",
+      "label": "📋 Market & Cost Value",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_free_tier\",\"title\":\"Disruptive pricing model\",\"content\":\"Discussion shifted to the high utility of offering a comprehensive AI service for free.\"}]",
+      "level": 1,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 677.7487772720513,
+        "y": 280.5
+      },
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_competitor_landscape",
+      "label": "🔍 Alternative Tools",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_tool_alternatives\",\"title\":\"Alternative exploration\",\"content\":\"Noted mentions of custom API integration and alternative agents (e.g., Gobi Agent).\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": -295.2618835457397,
+        "y": 802.5
+      },
+      "width": 212,
+      "height": 197
+    },
+    {
+      "id": "grp_use_cases",
+      "label": "⚡ AI Use Cases",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_website_generation\",\"title\":\"Automated website building\",\"content\":\"Explored specific capabilities of agent alternatives, such as automated homepage creation.\"}]",
+      "level": 3,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 95,
+        "y": 1537.5
+      },
+      "width": 212,
+      "height": 197
+    },
+    {
+      "id": "grp_pkm_sharing",
+      "label": "💡 PKM & Sharing Motivation",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_pkm_need\",\"title\":\"Need to share personal knowledge\",\"content\":\"Strong alignment on the user desire to easily share curated PKM spaces with others.\"},{\"id\":\"post_pkm_active_usage\",\"title\":\"Active repository usage\",\"content\":\"Speaker noted their own active history of uploading recent work directly onto the platform.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 719,
+        "y": 802.5
+      },
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_gobi_ecosystem",
+      "label": "🔍 Gobi Platform",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_gobi_usage\",\"title\":\"Gobi personal site dependency\",\"content\":\"Highlighted constant reliance on Gobi as the central repository for personal web content.\"},{\"id\":\"post_git_dependence\",\"title\":\"Git-based workflow constraint\",\"content\":\"Noted tension where users primarily view or manage assets directly through Git.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 1153.8203125,
+        "y": 802.5
+      },
+      "width": 402,
+      "height": 197
+    },
+    {
+      "id": "grp_language_localization",
+      "label": "📌 Language Preferences",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_language_feedback\",\"title\":\"Language localization tension\",\"content\":\"User raised a question about the map layout generating primary summaries in English.\"}]",
+      "level": 1,
+      "sidebar": true,
+      "color": "",
+      "position": {
+        "x": 540.1311473920548,
+        "y": -142.5
+      },
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_meeting_navigation",
+      "label": "⚡ Active Meeting Navigation",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_in_meeting_reference\",\"title\":\"In-meeting historical reference\",\"content\":\"Value of reviewing one's own spoken contributions and flow in real-time during a meeting.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": -532.9512200340815,
+        "y": 814.5
+      },
+      "width": 212,
+      "height": 221
+    },
+    {
+      "id": "grp_predictive_guidance",
+      "label": "💡 Predictive Conversation Guidance",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_predictive_prompts\",\"title\":\"Predictive agenda prompts\",\"content\":\"Intended feature to predict and suggest optimal next discussion points based on the active agenda.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": -51.821218600394786,
+        "y": 823.5
+      },
+      "width": 212,
+      "height": 239
+    },
+    {
+      "id": "grp_product_identity",
+      "label": "📋 Product Identity Evolution",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_meeting_assistant_reframe\",\"title\":\"Meeting assistant development\",\"content\":\"Active engineering and design effort dedicated to realizing the interactive meeting assistant vision.\"}]",
+      "level": 1,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 400,
+        "y": 289.5
+      },
+      "width": 212,
+      "height": 239
+    },
+    {
+      "id": "grp_product_differentiation",
+      "label": "⚖️ Product Comparison",
+      "nodeType": "group",
+      "posts": "[{\"id\":\"post_minimix_comparison\",\"title\":\"Minimix differentiation\",\"content\":\"A key question was raised comparing the current system with Jinyoung's 'Minimix' product.\"},{\"id\":\"post_domain_differentiation\",\"title\":\"Domain focus vs General utility\",\"content\":\"This platform optimizes specifically for meetings, whereas other tools target general data workflows.\"},{\"id\":\"post_utility_friction\",\"title\":\"Activation barrier tension\",\"content\":\"Tension identified: If users already have general-purpose tools always active, there is friction in launching a separate meeting-only tool.\"},{\"id\":\"post_voice_as_differentiator\",\"title\":\"Voice interaction paradigm\",\"content\":\"Using voice as the primary native input medium lowers friction and defines the core differentiation.\"},{\"id\":\"post_functional_convergence\",\"title\":\"Functional convergence\",\"content\":\"Acknowledged that core underlying AI capabilities and features tend to overlap and converge across products.\"}]",
+      "level": 2,
+      "sidebar": false,
+      "color": "",
+      "position": {
+        "x": 289.1787813996052,
+        "y": 988.5
+      },
+      "width": 402,
+      "height": 569
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-grp_root-grp_meeting_context",
+      "source": "grp_root",
+      "target": "grp_meeting_context",
+      "label": ""
+    },
+    {
+      "id": "e-grp_meeting_context-grp_realtime_value",
+      "source": "grp_meeting_context",
+      "target": "grp_realtime_value",
+      "label": ""
+    },
+    {
+      "id": "e-grp_meeting_context-grp_market_position",
+      "source": "grp_meeting_context",
+      "target": "grp_market_position",
+      "label": ""
+    },
+    {
+      "id": "e-grp_market_position-grp_competitor_landscape",
+      "source": "grp_market_position",
+      "target": "grp_competitor_landscape",
+      "label": ""
+    },
+    {
+      "id": "e-grp_competitor_landscape-grp_use_cases",
+      "source": "grp_competitor_landscape",
+      "target": "grp_use_cases",
+      "label": ""
+    },
+    {
+      "id": "e-grp_competitor_landscape-grp_pkm_sharing",
+      "source": "grp_competitor_landscape",
+      "target": "grp_pkm_sharing",
+      "label": ""
+    },
+    {
+      "id": "e-grp_pkm_sharing-grp_gobi_ecosystem",
+      "source": "grp_pkm_sharing",
+      "target": "grp_gobi_ecosystem",
+      "label": ""
+    },
+    {
+      "id": "e-grp_meeting_context-grp_meeting_navigation",
+      "source": "grp_meeting_context",
+      "target": "grp_meeting_navigation",
+      "label": ""
+    },
+    {
+      "id": "e-grp_meeting_navigation-grp_predictive_guidance",
+      "source": "grp_meeting_navigation",
+      "target": "grp_predictive_guidance",
+      "label": ""
+    },
+    {
+      "id": "e-grp_root-grp_product_identity",
+      "source": "grp_root",
+      "target": "grp_product_identity",
+      "label": ""
+    },
+    {
+      "id": "e-grp_product_identity-grp_product_differentiation",
+      "source": "grp_product_identity",
+      "target": "grp_product_differentiation",
+      "label": ""
+    }
+  ],
+  "suggestions": [
+    {
+      "id": "sug_agenda",
+      "title": "Set Meeting Agenda",
+      "content": "Please share the main topic or agenda of today's meeting to initialize the navigation map.",
+      "createdAt": 1779397443364,
+      "pinned": false,
+      "status": "suggested"
+    },
+    {
+      "id": "sug_topic_start",
+      "title": "Start Core Topic",
+      "content": "Transition the conversation from tool setup to the actual core business or strategic topic of your meeting.",
+      "createdAt": 1779397460452,
+      "pinned": false,
+      "status": "suggested"
+    },
+    {
+      "id": "sug_share_pkm",
+      "title": "Review Shared PKM",
+      "content": "Consider walking through one of the speaker's uploaded PKM spaces to observe actual user content patterns.",
+      "createdAt": 1779397547878,
+      "pinned": false,
+      "status": "suggested"
+    },
+    {
+      "id": "sug_language_pref",
+      "title": "Confirm Language Preference",
+      "content": "Ask whether the user prefers the canvas summaries to be generated in Korean instead of English.",
+      "createdAt": 1779397569702,
+      "pinned": false,
+      "status": "suggested"
+    },
+    {
+      "id": "sug_differentiation_points",
+      "title": "Define Minimix Differences",
+      "content": "Explain the key architectural or value proposition differences between this canvas and Minimix.",
+      "createdAt": 1779397619269,
+      "pinned": false,
+      "status": "suggested"
+    }
+  ],
+  "sessionId": "1b2b3f20-b346-4a74-b1a7-9651249521de",
+  "processedLineCount": 44
+}
